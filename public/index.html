@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobMatch AI — Orientation professionnelle</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --m50:#EBF8F1;--m100:#C8EDDD;--m200:#A0DFC4;--m300:#7DD4A8;--m500:#3FAF7A;--m700:#237A52;--m900:#133F2C;
+  --b50:#FAF6EE;--b100:#F0E8D5;--b200:#DDD0B8;--b300:#C8B89A;--b400:#B8A68A;--b600:#8C7A62;
+  --td:#2A2520;--tm:#5C5248;--ts:#8C7A68;--wh:#fff;--r:14px;--rl:22px
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--b50);color:var(--td);min-height:100vh}
+.screen{display:none}.screen.on{display:block}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;background:rgba(250,246,238,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--b200);height:62px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.nav-mark{width:34px;height:34px;border-radius:10px;background:var(--m500);display:flex;align-items:center;justify-content:center}
+.nav-mark svg{width:17px;height:17px;fill:#fff}
+.nav-name{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:var(--td)}
+.nav-name span{color:var(--m500)}
+.nav-r{display:flex;align-items:center;gap:10px}
+.nav-pill{font-size:12px;font-weight:500;color:var(--m700);background:var(--m50);border:1px solid var(--m100);border-radius:20px;padding:4px 14px}
+.nav-back{font-size:13px;font-weight:500;color:var(--m700);background:var(--m50);border:1.5px solid var(--m200);border-radius:20px;padding:5px 14px;cursor:pointer;transition:.2s;display:none}
+.nav-back:hover{background:var(--m100)}.nav-back.show{display:block}
+
+/* SCREEN 0 — CLÉ API */
+.apikey-wrap{max-width:520px;margin:0 auto;padding:5rem 1.5rem}
+.apikey-ico{width:64px;height:64px;border-radius:20px;background:var(--m50);border:2px solid var(--m100);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 1.4rem}
+.apikey-hd{text-align:center;margin-bottom:2rem}
+.apikey-hd h2{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--td);margin-bottom:.5rem}
+.apikey-hd p{font-size:14.5px;color:var(--ts);line-height:1.7}
+.apikey-card{background:var(--wh);border:1px solid var(--b200);border-radius:var(--rl);padding:2rem;box-shadow:0 2px 14px rgba(42,37,32,.06)}
+.apikey-lbl{font-size:13px;font-weight:500;color:var(--tm);margin-bottom:8px}
+.apikey-inp{width:100%;border:1.5px solid var(--b200);border-radius:var(--r);padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--td);outline:none;transition:.2s;background:var(--wh)}
+.apikey-inp:focus{border-color:var(--m500)}
+.apikey-inp::placeholder{color:var(--b400)}
+.apikey-note{font-size:12px;color:var(--ts);line-height:1.6;margin-top:10px;padding:10px 14px;background:var(--b50);border-radius:10px;border-left:3px solid var(--b300)}
+.apikey-note a{color:var(--m700);text-decoration:underline}
+.apikey-btn{width:100%;margin-top:1.4rem;background:var(--m500);color:#fff;border:none;border-radius:50px;padding:15px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:.2s;box-shadow:0 3px 14px rgba(63,175,122,.28)}
+.apikey-btn:hover{background:var(--m700)}
+.apikey-err{font-size:13px;color:#a32d2d;background:#FEF2F2;border:1px solid #FBB9B9;border-radius:10px;padding:10px 14px;margin-top:10px;display:none}
+.apikey-err.show{display:block}
+
+/* SCREEN 1 — ACCUEIL */
+.hero{max-width:880px;margin:0 auto;padding:5rem 2rem 4rem;text-align:center}
+.hero-chip{display:inline-flex;align-items:center;gap:8px;background:var(--m50);border:1px solid var(--m100);border-radius:30px;padding:6px 18px;margin-bottom:1.6rem;font-size:13px;font-weight:500;color:var(--m700);letter-spacing:.04em}
+.hdot{width:8px;height:8px;border-radius:50%;background:var(--m500);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:600;line-height:1.1;margin-bottom:.9rem}
+.hero h1 em{font-style:italic;color:var(--m500)}
+.hero-tagline{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:var(--m700);margin-bottom:.8rem}
+.hero-sub{font-size:16px;color:var(--ts);max-width:540px;margin:0 auto 2.5rem;line-height:1.75}
+.hero-btn{display:inline-flex;align-items:center;gap:10px;background:var(--m500);color:#fff;border:none;border-radius:50px;padding:17px 44px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:.25s;box-shadow:0 4px 22px rgba(63,175,122,.32)}
+.hero-btn:hover{background:var(--m700);transform:translateY(-2px)}
+.hero-btn svg{width:18px;height:18px;fill:#fff}
+.stats-row{display:flex;justify-content:center;gap:3.5rem;margin-top:3rem;padding-top:2.5rem;border-top:1px solid var(--b200);flex-wrap:wrap}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--m500)}
+.stat-l{font-size:13px;color:var(--ts);margin-top:2px}
+.feat-band{background:var(--wh);border-top:1px solid var(--b200);border-bottom:1px solid var(--b200);padding:2.5rem 2rem}
+.feat-grid{max-width:940px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem}
+.feat-item{display:flex;align-items:flex-start;gap:14px}
+.feat-ico{width:42px;height:42px;border-radius:12px;background:var(--m50);border:1px solid var(--m100);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.feat-t{font-size:14px;font-weight:500;color:var(--td);margin-bottom:3px}
+.feat-d{font-size:13px;color:var(--ts);line-height:1.5}
+.testi-band{padding:4rem 2rem;background:var(--b50)}
+.testi-inner{max-width:960px;margin:0 auto}
+.band-eyebrow{font-size:12px;font-weight:500;color:var(--m700);text-transform:uppercase;letter-spacing:.08em;text-align:center;margin-bottom:.5rem}
+.band-title{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:600;color:var(--td);text-align:center;margin-bottom:2.5rem}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.2rem}
+.tcard{background:var(--wh);border:1px solid var(--b200);border-radius:var(--rl);padding:1.6rem;position:relative}
+.tcard::before{content:'"';position:absolute;top:10px;right:16px;font-family:'Cormorant Garamond',serif;font-size:4.5rem;color:var(--m100);line-height:1;pointer-events:none}
+.tcard-stars{color:var(--m500);font-size:13px;letter-spacing:2px;margin-bottom:.8rem}
+.tcard-text{font-size:13.5px;color:var(--tm);line-height:1.7;margin-bottom:1.2rem;font-style:italic}
+.tcard-author{display:flex;align-items:center;gap:10px}
+.tcard-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.tcard-name{font-size:13.5px;font-weight:500;color:var(--td)}
+.tcard-role{font-size:12px;color:var(--ts);margin-top:1px}
+.tcard-tag{display:inline-block;margin-top:.5rem;font-size:11px;font-weight:500;color:var(--m700);background:var(--m50);border:1px solid var(--m100);border-radius:20px;padding:2px 10px}
+.how-band{background:var(--wh);border-top:1px solid var(--b200);padding:4rem 2rem}
+.how-inner{max-width:880px;margin:0 auto}
+.how-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;margin-top:2rem}
+.how-step{text-align:center;padding:1.6rem 1rem;background:var(--b50);border:1px solid var(--b200);border-radius:var(--rl)}
+.how-num{width:40px;height:40px;border-radius:50%;background:var(--m500);color:#fff;font-size:15px;font-weight:500;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+.how-t{font-size:14px;font-weight:500;color:var(--td);margin-bottom:.4rem}
+.how-d{font-size:13px;color:var(--ts);line-height:1.5}
+.cta-band{background:linear-gradient(135deg,var(--m900),var(--m700));margin:3rem auto;border-radius:var(--rl);padding:3rem 2rem;text-align:center;max-width:860px}
+.cta-band h2{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:#fff;margin-bottom:.7rem}
+.cta-band p{font-size:15px;color:rgba(255,255,255,.75);margin-bottom:1.8rem}
+.cta-band-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--m700);border:none;border-radius:50px;padding:14px 36px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:.2s}
+.cta-band-btn:hover{background:var(--m50)}
+
+/* SCREEN 2 — QUIZ */
+.quiz-wrap{max-width:700px;margin:0 auto;padding:3rem 1.5rem 5rem}
+.quiz-hd{text-align:center;margin-bottom:2rem}
+.quiz-hd h2{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:600;color:var(--td)}
+.quiz-hd p{font-size:14px;color:var(--ts);margin-top:.3rem}
+.prog-row{display:flex;align-items:center;gap:4px;margin-bottom:2rem}
+.prog-seg{flex:1;height:5px;border-radius:3px;background:var(--b200);transition:background .4s}
+.prog-seg.done{background:var(--m500)}.prog-seg.act{background:var(--m300)}
+.prog-lbl{font-size:12px;color:var(--ts);white-space:nowrap;padding-left:6px}
+.qcard{background:var(--wh);border:1px solid var(--b200);border-radius:var(--rl);padding:2rem;box-shadow:0 2px 12px rgba(42,37,32,.05);animation:cin .3s ease}
+@keyframes cin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.qchip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:var(--m700);letter-spacing:.07em;text-transform:uppercase;margin-bottom:.7rem}
+.qchip-dot{width:6px;height:6px;border-radius:50%;background:var(--m500)}
+.qtxt{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:500;color:var(--td);line-height:1.3;margin-bottom:1.5rem}
+.country-input-wrap{position:relative}
+.country-input{width:100%;border:1.5px solid var(--b200);border-radius:var(--r);padding:14px 14px 14px 46px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--td);outline:none;transition:.2s;background:var(--wh)}
+.country-input:focus{border-color:var(--m500)}
+.country-input::placeholder{color:var(--b400)}
+.country-flag{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none}
+.country-hint{font-size:12px;color:var(--ts);margin-top:8px;line-height:1.5}
+.multi-note{font-size:12px;color:var(--ts);background:var(--m50);border-left:3px solid var(--m300);padding:6px 12px;border-radius:0 8px 8px 0;margin-bottom:1rem}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.opt{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid var(--b200);border-radius:var(--r);cursor:pointer;transition:.18s;background:var(--wh);font-size:13.5px;color:var(--tm);user-select:none}
+.opt:hover{border-color:var(--m300);background:var(--m50)}
+.opt.sel{border-color:var(--m500);background:var(--m50);color:var(--m700);font-weight:500}
+.opt-ico{width:30px;height:30px;border-radius:9px;background:var(--b100);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:.18s}
+.opt.sel .opt-ico{background:var(--m100)}.opt-full{grid-column:1/-1}
+.sub-box{display:none;margin-top:8px}.sub-box.on{display:block}
+.sub-inp,.free-inp{width:100%;border:1.5px solid var(--b200);border-radius:var(--r);padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--td);resize:none;outline:none;transition:.2s;background:var(--wh);line-height:1.7}
+.sub-inp:focus,.free-inp:focus{border-color:var(--m500)}
+.sub-inp::placeholder,.free-inp::placeholder{color:var(--b400)}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.8rem;gap:12px}
+.btn{padding:12px 28px;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;border:none;outline:none;transition:.2s}
+.btn-ghost{background:transparent;border:1.5px solid var(--b300);color:var(--tm)}
+.btn-ghost:hover{border-color:var(--tm)}
+.btn-green{background:var(--m500);color:#fff;box-shadow:0 3px 14px rgba(63,175,122,.28)}
+.btn-green:hover{background:var(--m700);transform:translateY(-1px)}
+.btn-green:disabled{background:var(--b200);color:var(--b400);cursor:not-allowed;box-shadow:none;transform:none}
+
+/* SCREEN 3 — LOADING */
+.load-wrap{max-width:480px;margin:0 auto;padding:6rem 2rem;text-align:center}
+.load-ring{width:80px;height:80px;border-radius:50%;background:var(--m50);border:2px solid var(--m100);display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;animation:breathe 2s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.load-spin{width:32px;height:32px;border:3px solid var(--m200);border-top-color:var(--m500);border-radius:50%;animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-t{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--td);margin-bottom:.5rem}
+.load-s{font-size:14px;color:var(--ts);line-height:1.7;margin-bottom:2rem}
+.load-steps{display:flex;flex-direction:column;gap:10px;text-align:left;max-width:280px;margin:0 auto}
+.load-step{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ts);opacity:0;transform:translateX(-10px);transition:all .4s}
+.load-step.show{opacity:1;transform:translateX(0)}
+.load-dot{width:8px;height:8px;border-radius:50%;background:var(--m300);flex-shrink:0}
+
+/* SCREEN 4 — DASHBOARD */
+.dash{max-width:920px;margin:0 auto;padding:3rem 1.5rem 5rem}
+.dash-hd{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem}
+.dash-eyebrow{font-size:12px;font-weight:500;color:var(--m700);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem}
+.dash-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--td)}
+.dash-sub{font-size:14px;color:var(--ts);margin-top:.3rem}
+.dash-acts{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn-out{background:transparent;border:1.5px solid var(--b300);color:var(--tm);padding:10px 20px;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:13.5px;cursor:pointer;transition:.2s}
+.btn-out:hover{border-color:var(--m500);color:var(--m700)}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-bottom:1.5rem}
+.kpi{background:var(--wh);border:1px solid var(--b200);border-radius:var(--rl);padding:1.2rem 1.4rem}
+.kpi-lbl{font-size:11px;font-weight:500;color:var(--ts);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.kpi-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;color:var(--m500);line-height:1}
+.kpi-sub{font-size:12px;color:var(--ts);margin-top:.3rem}
+.kpi-country{background:linear-gradient(135deg,var(--m50),var(--b50));border-color:var(--m100)}
+.kpi-country .kpi-val{font-size:1.2rem;color:var(--m700)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+.dc{background:var(--wh);border:1px solid var(--b200);border-radius:var(--rl);padding:1.5rem}
+.dc-lbl{font-size:11px;font-weight:500;color:var(--ts);text-transform:uppercase;letter-spacing:.07em;margin-bottom:1rem;display:flex;align-items:center;gap:7px}
+.dc-dot{width:6px;height:6px;border-radius:50%;background:var(--m500)}
+.prof-row{display:flex;align-items:center;gap:14px;margin-bottom:1.1rem}
+.prof-ico{width:50px;height:50px;border-radius:14px;background:var(--m100);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.prof-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--td)}
+.prof-sub{font-size:13px;color:var(--ts);margin-top:2px}
+.prof-txt{font-size:13.5px;color:var(--tm);line-height:1.7}
+.sep-line{display:flex;align-items:center;gap:8px;margin:10px 0}
+.sep-line::before,.sep-line::after{content:'';flex:1;height:1px;background:var(--b200)}
+.sep-label{font-size:11px;color:var(--ts)}
+.compat-list{display:flex;flex-direction:column;gap:12px}
+.compat-lbl{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.compat-name{font-size:13.5px;font-weight:500;color:var(--td)}
+.compat-pct{font-size:12px;color:var(--m700);font-weight:500}
+.bar-bg{height:7px;background:var(--b100);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:var(--m500);transition:width 1s ease;width:0}
+.bar-fill.m{background:var(--b400)}.bar-fill.l{background:var(--b300)}
+.jcard{background:var(--wh);border:1px solid var(--b200);border-radius:var(--rl);padding:1.5rem;position:relative;overflow:hidden}
+.jcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px}
+.j1::before{background:var(--m500)}.j2::before{background:var(--b400)}.j3::before{background:var(--b600)}
+.jtop{display:flex;align-items:flex-start;gap:10px;margin-bottom:1rem}
+.jmedal{width:34px;height:34px;border-radius:10px;background:var(--b100);border:1px solid var(--b200);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.jtitle{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--td);line-height:1.2}
+.jtag{display:inline-block;font-size:11px;font-weight:500;color:var(--m700);background:var(--m50);border:1px solid var(--m100);border-radius:20px;padding:2px 10px;margin-top:3px}
+.jdesc{font-size:13px;color:var(--ts);margin-bottom:.9rem;line-height:1.55}
+.jwhy{background:var(--m50);border-radius:10px;padding:10px 13px;margin-bottom:.9rem}
+.jwhy-l{font-size:10px;font-weight:500;color:var(--m700);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.jwhy-t{font-size:13px;color:var(--tm);line-height:1.6}
+.skills{display:flex;flex-wrap:wrap;gap:6px}
+.skill{padding:4px 12px;border-radius:20px;background:var(--b100);border:1px solid var(--b200);font-size:11.5px;color:var(--ts)}
+.filiere-badge{display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:11px;font-weight:500;color:var(--m700);background:var(--m50);border:1px solid var(--m100);border-radius:20px;padding:3px 10px}
+canvas#radar{display:block;margin:0 auto}
+.advice-box{background:linear-gradient(135deg,var(--b50),var(--m50));border:1px solid var(--m100);border-radius:var(--rl);padding:1.8rem 2rem;display:flex;gap:16px;align-items:flex-start;margin-bottom:1.5rem}
+.advice-ico{width:44px;height:44px;border-radius:12px;background:var(--m100);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.advice-lbl{font-size:11px;font-weight:500;color:var(--m700);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.advice-txt{font-size:14px;color:var(--tm);line-height:1.75}
+
+/* BOUTON UNIVERSITÉS */
+.btn-uni-wrap{text-align:center;margin:1.5rem 0}
+.btn-uni{display:inline-flex;align-items:center;gap:10px;background:var(--wh);color:var(--m700);border:2px solid var(--m500);border-radius:50px;padding:14px 36px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:.25s;box-shadow:0 3px 14px rgba(63,175,122,.15)}
+.btn-uni:hover{background:var(--m500);color:#fff;box-shadow:0 6px 22px rgba(63,175,122,.3)}
+.btn-uni svg{width:18px;height:18px;transition:.25s}
+.btn-uni:hover svg{fill:#fff}
+
+/* SECTION UNIVERSITÉS */
+.uni-section{display:none;margin-top:1rem;animation:cin .4s ease}
+.uni-header{text-align:center;margin-bottom:1.5rem}
+.uni-header h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;color:var(--td);margin-bottom:.4rem}
+.uni-header p{font-size:14px;color:var(--ts)}
+.uni-country-badge{display:inline-flex;align-items:center;gap:6px;background:var(--m50);border:1px solid var(--m100);border-radius:20px;padding:4px 14px;font-size:13px;font-weight:500;color:var(--m700);margin-bottom:1rem}
+.uni-loading{text-align:center;padding:3rem 1rem}
+.uni-loading p{font-size:14px;color:var(--ts);margin-top:1rem}
+.uni-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.uni-card{background:var(--wh);border:1px solid var(--b200);border-radius:var(--rl);padding:1.5rem;position:relative;overflow:hidden}
+.uni-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+.uc1::before{background:var(--m500)}.uc2::before{background:var(--b400)}.uc3::before{background:var(--b600)}
+.uni-card-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--td);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--b200)}
+.uni-item{padding:10px 0;border-bottom:1px solid var(--b100)}
+.uni-item:last-child{border-bottom:none}
+.uni-name{font-size:13.5px;font-weight:500;color:var(--td);margin-bottom:3px}
+.uni-prog{font-size:12.5px;color:var(--ts);margin-bottom:2px}
+.uni-city{font-size:12px;color:var(--m700)}
+.uni-link{display:inline-block;margin-top:4px;font-size:11.5px;color:var(--m500);text-decoration:none}
+.uni-link:hover{text-decoration:underline}
+.uni-err{background:#FEF2F2;border:1px solid #FBB9B9;border-radius:var(--r);padding:16px;font-size:13.5px;color:#7a2020;text-align:center}
+.uni-note{font-size:12px;color:var(--ts);text-align:center;margin-top:1rem;padding:10px;background:var(--b50);border-radius:10px}
+
+/* FEEDBACK CTA */
+.fb-cta-block{background:linear-gradient(135deg,var(--m900),var(--m700));border-radius:var(--rl);padding:2.2rem 2rem;text-align:center;margin-top:1.5rem}
+.fb-cta-block h3{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:#fff;margin:.5rem 0}
+.fb-cta-block p{font-size:14px;color:rgba(255,255,255,.75);margin-bottom:1.4rem}
+.fb-cta-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--m700);border:none;border-radius:50px;padding:13px 32px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:.2s}
+.fb-cta-btn:hover{background:var(--m50)}
+
+/* SCREEN 5 — FEEDBACK */
+.fb-wrap{max-width:640px;margin:0 auto;padding:4rem 1.5rem 5rem}
+.fb-hd{text-align:center;margin-bottom:2.5rem}
+.fb-hd-ico{width:64px;height:64px;border-radius:20px;background:var(--m50);border:2px solid var(--m100);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 1.2rem}
+.fb-hd h2{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--td);margin-bottom:.5rem}
+.fb-hd p{font-size:15px;color:var(--ts);line-height:1.6}
+.fb-card{background:var(--wh);border:1px solid var(--b200);border-radius:var(--rl);padding:2rem;box-shadow:0 2px 12px rgba(42,37,32,.05);margin-bottom:1.2rem}
+.fb-q{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:500;color:var(--td);margin-bottom:.5rem}
+.fb-note{font-size:12px;color:var(--ts);background:var(--m50);border-left:3px solid var(--m300);padding:6px 12px;border-radius:0 8px 8px 0;margin-bottom:1.2rem}
+.fb-opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:1.5rem}
+.fbo{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid var(--b200);border-radius:var(--r);cursor:pointer;transition:.18s;background:var(--wh);font-size:13.5px;color:var(--tm);user-select:none}
+.fbo:hover{border-color:var(--m300);background:var(--m50)}
+.fbo.sel{border-color:var(--m500);background:var(--m50);color:var(--m700);font-weight:500}
+.fbo-ico{width:30px;height:30px;border-radius:9px;background:var(--b100);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.fbo.sel .fbo-ico{background:var(--m100)}
+.fb-ta-lbl{font-size:13px;font-weight:500;color:var(--tm);margin-bottom:8px}
+.fb-ta{width:100%;border:1.5px solid var(--b200);border-radius:var(--r);padding:14px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--td);resize:none;outline:none;transition:.2s;background:var(--wh);line-height:1.7}
+.fb-ta:focus{border-color:var(--m500)}.fb-ta::placeholder{color:var(--b400)}
+.fb-actions{display:flex;gap:12px;justify-content:center;margin-top:1.8rem;flex-wrap:wrap}
+.btn-fb-send{background:var(--m500);color:#fff;border:none;border-radius:50px;padding:14px 36px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:.2s;box-shadow:0 3px 14px rgba(63,175,122,.28)}
+.btn-fb-send:hover{background:var(--m700)}
+.btn-fb-skip{background:transparent;border:1.5px solid var(--b300);color:var(--ts);border-radius:50px;padding:13px 28px;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;transition:.2s}
+.btn-fb-skip:hover{color:var(--tm);border-color:var(--b400)}
+.fb-thanks{text-align:center;padding:3rem 1rem;display:none}
+.fb-thanks-ico{font-size:3.5rem;margin-bottom:1rem}
+.fb-thanks h3{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--td);margin-bottom:.6rem}
+.fb-thanks p{font-size:15px;color:var(--ts);line-height:1.6;margin-bottom:2rem;max-width:380px;margin-left:auto;margin-right:auto}
+.fb-thanks-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* ERREUR */
+.err-wrap{max-width:560px;margin:4rem auto;padding:0 1.5rem}
+.err-box{background:#FEF2F2;border:1px solid #FBB9B9;border-radius:var(--r);padding:20px;font-size:14px;color:#7a2020;line-height:1.65}
+.err-box strong{display:block;margin-bottom:6px;color:#a32d2d;font-size:15px}
+.err-detail{font-size:12px;color:#b05555;margin-top:8px;font-family:monospace;word-break:break-all}
+footer{text-align:center;padding:2rem;font-size:12.5px;color:var(--b400);border-top:1px solid var(--b200);margin-top:1rem}
+footer span{color:var(--m500)}
+
+@media(max-width:640px){
+  .opts,.fb-opts,.feat-grid,.g2,.g3,.uni-grid{grid-template-columns:1fr}
+  .dash-hd,.advice-box{flex-direction:column}
+  nav{padding:0 1rem}.nav-pill{display:none}
+  .hero h1{font-size:2.2rem}.stats-row{gap:1.5rem}
+  .testi-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" id="nav-logo">
+    <div class="nav-mark"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+    <span class="nav-name">JobMatch<span>AI</span></span>
+  </div>
+  <div class="nav-r">
+    <button class="nav-back" id="nav-back">← Accueil</button>
+    <span class="nav-pill">Agent d'orientation IA</span>
+  </div>
+</nav>
+
+<!-- ══ SCREEN 0 : CLÉ API ══ -->
+<div class="screen" id="s-key">
+  <div class="apikey-wrap">
+    <div class="apikey-ico">🔑</div>
+    <div class="apikey-hd">
+      <h2>Bienvenue sur JobMatch AI</h2>
+      <p>Saisissez votre clé API Anthropic pour démarrer. Elle reste dans votre navigateur et n'est jamais partagée.</p>
+    </div>
+    <div class="apikey-card">
+      <div class="apikey-lbl">Votre clé API Anthropic</div>
+      <input class="apikey-inp" type="password" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off">
+      <div class="apikey-note">Pas encore de clé ? Créez-en une gratuitement sur <a href="https://console.anthropic.com/keys" target="_blank">console.anthropic.com</a></div>
+      <div class="apikey-err" id="apikey-err">Clé trop courte. Vérifiez que vous avez bien copié votre clé API complète.</div>
+      <button class="apikey-btn" id="apikey-go-btn">Accéder à JobMatch AI →</button>
+    </div>
+  </div>
+  <footer>Propulsé par <span>JobMatch AI</span> · Vos données restent dans votre navigateur</footer>
+</div>
+
+<!-- ══ SCREEN 1 : ACCUEIL ══ -->
+<div class="screen on" id="s-home">
+  <section class="hero">
+    <div class="hero-chip"><div class="hdot"></div>Intelligence artificielle · Orientation professionnelle</div>
+    <h1>Découvrez la carrière<br>qui vous <em>ressemble vraiment</em></h1>
+    <p class="hero-tagline">JobMatch AI — votre guide intelligent vers le métier fait pour vous.</p>
+    <p class="hero-sub">En 13 questions ciblées, notre agent IA analyse votre profil, vos émotions et vos ambitions pour vous proposer un tableau de bord d'orientation personnalisé selon votre pays.</p>
+    <button class="hero-btn" id="start-btn">
+      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      Commencer le quiz gratuitement
+    </button>
+    <div class="stats-row">
+      <div><div class="stat-n">13</div><div class="stat-l">Questions ciblées</div></div>
+      <div><div class="stat-n">3</div><div class="stat-l">Métiers recommandés</div></div>
+      <div><div class="stat-n">🌍</div><div class="stat-l">Adapté à votre pays</div></div>
+      <div><div class="stat-n">100%</div><div class="stat-l">Personnalisé par IA</div></div>
+    </div>
+  </section>
+
+  <div class="feat-band">
+    <div class="feat-grid">
+      <div class="feat-item"><div class="feat-ico">🎯</div><div><div class="feat-t">Analyse personnalisée</div><div class="feat-d">Chaque recommandation justifiée selon vos réponses et émotions.</div></div></div>
+      <div class="feat-item"><div class="feat-ico">🌍</div><div><div class="feat-t">Adapté à votre pays</div><div class="feat-d">Top 3 filtré selon les filières disponibles dans votre pays.</div></div></div>
+      <div class="feat-item"><div class="feat-ico">🏛️</div><div><div class="feat-t">Universités disponibles</div><div class="feat-d">Recherche en temps réel des établissements dans votre pays.</div></div></div>
+      <div class="feat-item"><div class="feat-ico">🧩</div><div><div class="feat-t">2 types de personnalité</div><div class="feat-d">Profil dominant + personnalité complémentaire révélés par l'IA.</div></div></div>
+    </div>
+  </div>
+
+  <div class="testi-band">
+    <div class="testi-inner">
+      <div class="band-eyebrow">Ils ont essayé · Ils ont trouvé leur voie</div>
+      <h2 class="band-title">Ce que disent ceux que JobMatch AI a guidés</h2>
+      <div class="testi-grid">
+        <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-text">Je ne savais vraiment pas quoi faire après le bac. JobMatch AI m'a orienté vers le Design UX — un domaine que je n'avais même pas envisagé. Aujourd'hui je suis en école de design et je m'épanouis totalement.</p><div class="tcard-author"><div class="tcard-av" style="background:#EBF8F1;color:#237A52">AK</div><div><div class="tcard-name">Aminata K.</div><div class="tcard-role">Étudiante en Design UX · 21 ans</div></div></div><span class="tcard-tag">Profil Créatif</span></div>
+        <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-text">J'hésitais entre médecine et ingénierie. Le quiz a révélé mon profil hybride et m'a proposé l'ingénierie biomédicale. Exactement ce qu'il me fallait. Les justifications étaient bluffantes de précision.</p><div class="tcard-author"><div class="tcard-av" style="background:#F0E8D5;color:#8C7A62">TN</div><div><div class="tcard-name">Thomas N.</div><div class="tcard-role">Ingénieur biomédical junior · 24 ans</div></div></div><span class="tcard-tag">Profil Hybride</span></div>
+        <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-text">En reconversion à 34 ans, je cherchais un cadre pour m'orienter. JobMatch AI m'a recommandé Product Manager. Six mois plus tard j'ai décroché mon premier poste dans ce domaine.</p><div class="tcard-author"><div class="tcard-av" style="background:#EBF8F1;color:#237A52">SB</div><div><div class="tcard-name">Sandra B.</div><div class="tcard-role">Product Manager · Reconversion réussie</div></div></div><span class="tcard-tag">Profil Leader</span></div>
+        <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-text">L'IA a pris en compte ma réponse sur mon lien à la nature pour me suggérer l'ingénierie des énergies renouvelables. La liste des universités disponibles au Maroc m'a vraiment aidé à choisir.</p><div class="tcard-author"><div class="tcard-av" style="background:#F0E8D5;color:#8C7A62">MO</div><div><div class="tcard-name">Moussa O.</div><div class="tcard-role">Étudiant en énergies renouvelables · 22 ans</div></div></div><span class="tcard-tag">Profil Technicien</span></div>
+        <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-text">J'avais l'impression d'être trop créative pour les métiers sérieux. JobMatch AI m'a montré que ma créativité était une vraie force dans le journalisme. Un déclic total !</p><div class="tcard-author"><div class="tcard-av" style="background:#EBF8F1;color:#237A52">LF</div><div><div class="tcard-name">Léa F.</div><div class="tcard-role">Journaliste en formation · 19 ans</div></div></div><span class="tcard-tag">Profil Communicant</span></div>
+        <div class="tcard"><div class="tcard-stars">★★★★★</div><p class="tcard-text">Le tableau de bord avec les scores m'a vraiment aidé à visualiser mes options. Les universités disponibles en Côte d'Ivoire étaient exactement ce dont j'avais besoin pour planifier mes études.</p><div class="tcard-author"><div class="tcard-av" style="background:#F0E8D5;color:#8C7A62">RC</div><div><div class="tcard-name">Rafael C.</div><div class="tcard-role">Data Scientist stagiaire · 23 ans</div></div></div><span class="tcard-tag">Profil Analytique</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="how-band">
+    <div class="how-inner">
+      <div class="band-eyebrow" style="text-align:center">Processus en 4 étapes</div>
+      <h2 class="band-title">Comment fonctionne JobMatch AI ?</h2>
+      <div class="how-steps">
+        <div class="how-step"><div class="how-num">1</div><div class="how-t">Choisissez votre pays</div><div class="how-d">Indiquez où vous souhaitez étudier dès la première question.</div></div>
+        <div class="how-step"><div class="how-num">2</div><div class="how-t">Répondez au quiz</div><div class="how-d">12 questions sur vos intérêts, émotions et ambitions.</div></div>
+        <div class="how-step"><div class="how-num">3</div><div class="how-t">Votre tableau de bord</div><div class="how-d">Top 3 adapté à votre pays, 2 personnalités, graphiques.</div></div>
+        <div class="how-step"><div class="how-num">4</div><div class="how-t">Trouvez vos universités</div><div class="how-d">Recherche en temps réel des établissements disponibles.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 2rem 3rem">
+    <div class="cta-band">
+      <h2>Prêt à découvrir votre voie ?</h2>
+      <p>JobMatch AI vous accompagne vers les métiers qui vous correspondent, dans votre pays.</p>
+      <button class="cta-band-btn" id="start-btn-2"><svg viewBox="0 0 24 24" width="15" height="15"><path d="M8 5v14l11-7z" fill="var(--m700)"/></svg>Démarrer maintenant</button>
+    </div>
+  </div>
+  <footer>Propulsé par <span>JobMatch AI</span> · Base de métiers internationale · Tendances 2024–2030</footer>
+</div>
+
+<!-- ══ SCREEN 2 : QUIZ ══ -->
+<div class="screen" id="s-quiz">
+  <div class="quiz-wrap">
+    <div class="quiz-hd"><h2>Quiz d'orientation</h2><p>Répondez honnêtement pour obtenir les recommandations les plus précises.</p></div>
+    <div class="prog-row" id="prog-row"></div>
+    <div id="q-area"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" id="btn-back" style="visibility:hidden" onclick="goBack()">← Retour</button>
+      <button class="btn btn-green" id="btn-next" disabled onclick="goNext()">Suivant →</button>
+    </div>
+  </div>
+  <footer>Propulsé par <span>JobMatch AI</span></footer>
+</div>
+
+<!-- ══ SCREEN 3 : LOADING ══ -->
+<div class="screen" id="s-load">
+  <div class="load-wrap">
+    <div class="load-ring"><div class="load-spin"></div></div>
+    <h2 class="load-t">Analyse en cours…</h2>
+    <p class="load-s">JobMatch AI construit votre profil<br>et identifie les métiers disponibles dans votre pays.</p>
+    <div class="load-steps">
+      <div class="load-step" id="ls1"><div class="load-dot"></div>Lecture de vos réponses…</div>
+      <div class="load-step" id="ls2"><div class="load-dot"></div>Identification de vos personnalités…</div>
+      <div class="load-step" id="ls3"><div class="load-dot"></div>Vérification des filières disponibles…</div>
+      <div class="load-step" id="ls4"><div class="load-dot"></div>Génération de votre tableau de bord…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 4 : DASHBOARD ══ -->
+<div class="screen" id="s-dash">
+  <div class="dash" id="dash-content"></div>
+  <footer>Propulsé par <span>JobMatch AI</span> · Tendances 2024–2030</footer>
+</div>
+
+<!-- ══ SCREEN 5 : FEEDBACK ══ -->
+<div class="screen" id="s-fb">
+  <div class="fb-wrap">
+    <div id="fb-form">
+      <div class="fb-hd">
+        <div class="fb-hd-ico">💬</div>
+        <h2>Votre avis compte !</h2>
+        <p>Aidez-nous à améliorer JobMatch AI. Cela ne prend que 30 secondes.</p>
+      </div>
+      <div class="fb-card">
+        <div class="fb-q">Qu'est-ce que cette expérience vous a apporté ?</div>
+        <p class="fb-note">Plusieurs réponses possibles — sélectionnez tout ce qui vous correspond</p>
+        <div class="fb-opts">
+          <div class="fbo" onclick="toggleFbo(this)"><div class="fbo-ico">💡</div><span>Plus de clarté sur mon avenir</span></div>
+          <div class="fbo" onclick="toggleFbo(this)"><div class="fbo-ico">🔭</div><span>Découverte d'un métier inconnu</span></div>
+          <div class="fbo" onclick="toggleFbo(this)"><div class="fbo-ico">✅</div><span>Confirmation d'une intuition</span></div>
+          <div class="fbo" onclick="toggleFbo(this)"><div class="fbo-ico">🗺️</div><span>Une direction concrète à suivre</span></div>
+          <div class="fbo" onclick="toggleFbo(this)"><div class="fbo-ico">🪞</div><span>Mieux comprendre mon profil</span></div>
+          <div class="fbo" onclick="toggleFbo(this)"><div class="fbo-ico">🏛️</div><span>Universités trouvées dans mon pays</span></div>
+          <div class="fbo" onclick="toggleFbo(this)"><div class="fbo-ico">📤</div><span>Envie de partager autour de moi</span></div>
+          <div class="fbo" onclick="toggleFbo(this)"><div class="fbo-ico">🤔</div><span>Pas vraiment convaincu(e)</span></div>
+        </div>
+        <div class="fb-ta-lbl">Votre commentaire libre (facultatif)</div>
+        <textarea class="fb-ta" id="fb-text" rows="4" placeholder="Dites-nous ce que vous avez pensé du quiz, des recommandations, des universités trouvées…"></textarea>
+      </div>
+      <div class="fb-actions">
+        <button class="btn-fb-send" onclick="submitFb()">Envoyer mon avis ✦</button>
+        <button class="btn-fb-skip" onclick="show('s-home')">Passer cette étape</button>
+      </div>
+    </div>
+    <div class="fb-thanks" id="fb-thanks">
+      <div class="fb-thanks-ico">🌿</div>
+      <h3>Merci pour votre retour !</h3>
+      <p>Votre avis aide à rendre JobMatch AI encore plus utile pour tous.</p>
+      <div class="fb-thanks-btns">
+        <button class="btn-fb-send" onclick="startQuiz()">Refaire le quiz</button>
+        <button class="btn-fb-skip" onclick="show('s-home')">Retour à l'accueil</button>
+      </div>
+    </div>
+  </div>
+  <footer>Propulsé par <span>JobMatch AI</span> · Merci de votre confiance</footer>
+</div>
+
+<script>
+/* ══════════════════════════
+   ÉTAT GLOBAL
+══════════════════════════ */
+var API_KEY = 'server-side'; // Clé gérée côté serveur
+var ans = {};
+var cur = 0;
+var dashResult = null;
+
+/* ══════════════════════════
+   NAVIGATION
+══════════════════════════ */
+function show(id) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('on'); });
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0, 0);
+  document.getElementById('nav-back').classList.toggle('show', id !== 's-home');
+  if (id === 's-fb') {
+    document.getElementById('fb-form').style.display = 'block';
+    document.getElementById('fb-thanks').style.display = 'none';
+    document.querySelectorAll('.fbo').forEach(function(e) { e.classList.remove('sel'); });
+    var ta = document.getElementById('fb-text'); if (ta) ta.value = '';
+  }
+}
+function goHome() { show('s-home'); }
+
+/* ══════════════════════════
+   CLÉ API
+══════════════════════════ */
+function initApiKey() {
+  var btn = document.getElementById('apikey-go-btn');
+  var inp = document.getElementById('api-key-input');
+  var err = document.getElementById('apikey-err');
+  function tryKey() {
+    var k = inp.value.trim().replace(/\s+/g, '');
+    if (!k || k.length < 10) { err.classList.add('show'); return; }
+    err.classList.remove('show');
+    API_KEY = k;
+    show('s-home');
+  }
+  btn.addEventListener('click', tryKey);
+  inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') tryKey(); });
+}
+
+/* ══════════════════════════
+   QUESTIONS (13 au total)
+══════════════════════════ */
+var QS = [
+  /* Q1 — PAYS (spéciale, type country) */
+  {id:'q_country', type:'country', lbl:'Question 1 / 13',
+   txt:'Dans quel pays souhaitez-vous étudier ou travailler ?',
+   ph:"Ex : France, Côte d'Ivoire, Canada, Maroc, Sénégal, Belgique…"},
+
+  /* Q2 */
+  {id:'q1', type:'single', lbl:'Question 2 / 13', txt:'Quelles activités vous énergisent le plus au quotidien ?',
+   opts:[{v:'create',e:'🎨',t:'Créer et imaginer des choses'},{v:'analyze',e:'📊',t:'Analyser et résoudre des problèmes'},{v:'help',e:'🤝',t:'Aider et accompagner les autres'},{v:'build',e:'🔧',t:'Construire et fabriquer concrètement'},{v:'lead',e:'🎯',t:'Diriger et prendre des décisions'},{v:'communicate',e:'🎤',t:'Communiquer et convaincre'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q3 */
+  {id:'q2', type:'multi', max:3, lbl:'Question 3 / 13', txt:'Quels domaines vous passionnent le plus ? (3 choix max)',
+   opts:[{v:'tech',e:'💻',t:'Technologie et numérique'},{v:'science',e:'🔬',t:'Sciences et recherche'},{v:'health',e:'🏥',t:'Santé et médecine'},{v:'art',e:'🎭',t:'Arts et création'},{v:'business',e:'📈',t:'Business et finance'},{v:'social',e:'🌱',t:'Humanitaire et social'},{v:'media',e:'📡',t:'Médias et communication'},{v:'engineering',e:'⚙️',t:'Ingénierie et fabrication'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q4 — ÉMOTION DOMINANTE */
+  {id:'q3', type:'single', lbl:'Question 4 / 13', txt:'Quelle émotion vous définit le mieux au travail ou en cours ?',
+   opts:[{v:'passion',e:'🔥',t:'La passion — je me surpasse quand je suis passionné(e)'},{v:'calm',e:'🌊',t:'Le calme — je réfléchis mieux dans la sérénité'},{v:'empathy_feel',e:'🤗',t:"L'empathie — je ressens profondément les émotions des autres"},{v:'ambition',e:'⚡',t:'L\'ambition — la compétition me motive fortement'},{v:'curiosity',e:'🔍',t:"La curiosité — l'inconnu m'excite et m'attire"},{v:'anxiety',e:'💭',t:'L\'anxiété créatrice — le stress me pousse à me dépasser'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q5 */
+  {id:'q4', type:'single', lbl:'Question 5 / 13', txt:'Comment préférez-vous travailler ?',
+   opts:[{v:'team',e:'👥',t:'En équipe, collaboration permanente'},{v:'autonomous',e:'🧩',t:'En autonomie totale, à mon rythme'},{v:'mix',e:'⚖️',t:'Un mélange équilibré des deux'},{v:'field',e:'🌍',t:'Sur le terrain, en déplacement régulier'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q6 */
+  {id:'q5', type:'single', lbl:'Question 6 / 13', txt:'Quel impact souhaitez-vous avoir sur le monde ?',
+   opts:[{v:'innovate',e:'🔭',t:'Innover et faire avancer les technologies'},{v:'heal',e:'💚',t:'Soigner et améliorer la qualité de vie'},{v:'inspire',e:'🎆',t:'Inspirer et émouvoir par la création'},{v:'change',e:'🕊️',t:'Transformer la société, défendre des causes'},{v:'grow',e:'📈',t:'Créer de la valeur économique'},{v:'protect',e:'🛡️',t:'Protéger les systèmes et les données'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q7 */
+  {id:'q6', type:'single', lbl:'Question 7 / 13', txt:'Quel environnement de travail vous correspond ?',
+   opts:[{v:'startup',e:'⚡',t:'Startup dynamique et innovante'},{v:'corporate',e:'🏛️',t:'Grande entreprise internationale'},{v:'ngo',e:'🌿',t:'ONG, association ou institution publique'},{v:'lab',e:'🔬',t:'Laboratoire ou centre de recherche'},{v:'freelance',e:'🖥️',t:'Freelance et télétravail'},{v:'field',e:'🌐',t:"Terrain et missions à l'étranger"},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q8 */
+  {id:'q7', type:'single', lbl:'Question 8 / 13', txt:"Quel niveau d'études envisagez-vous ?",
+   opts:[{v:'bac2',e:'📚',t:'Bac +2 (BTS, BUT, DUT)'},{v:'bac3',e:'📗',t:'Licence / Bac +3'},{v:'bac5',e:'📘',t:'Master / Grande école / Bac +5'},{v:'bac8',e:'🔭',t:'Doctorat / Recherche approfondie'},{v:'certif',e:'🌐',t:'Formations en ligne et certifications'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q9 — ACCOMPLISSEMENT */
+  {id:'q8', type:'single', lbl:'Question 9 / 13', txt:'Dans quels moments vous sentez-vous vraiment vivant(e) et accompli(e) ?',
+   opts:[{v:'helping_feel',e:'🤝',t:"Quand j'aide quelqu'un et que je vois la différence"},{v:'creating_feel',e:'🎨',t:'Quand je crée quelque chose de nouveau et original'},{v:'solving_feel',e:'🧩',t:'Quand je résous un problème complexe'},{v:'recognized_feel',e:'🏆',t:'Quand mon travail est reconnu et valorisé'},{v:'connecting_feel',e:'🌍',t:"Quand je me connecte à des personnes ou cultures différentes"},{v:'growing_feel',e:'🌱',t:"Quand j'apprends quelque chose qui me transforme"},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q10 */
+  {id:'q9', type:'multi', max:3, lbl:'Question 10 / 13', txt:'Quelles compétences souhaitez-vous développer ? (3 max)',
+   opts:[{v:'coding',e:'💻',t:'Programmation et développement'},{v:'design',e:'🎨',t:'Design visuel et UX'},{v:'data',e:'📊',t:'Analyse de données'},{v:'people',e:'👥',t:'Management et leadership'},{v:'writing',e:'✍️',t:'Rédaction et communication'},{v:'science',e:'🔬',t:'Recherche et expérimentation'},{v:'sales',e:'🤝',t:'Commerce et négociation'},{v:'languages',e:'🌐',t:'Langues étrangères'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q11 — PEURS */
+  {id:'q10', type:'single', lbl:'Question 11 / 13', txt:"Quelle situation vous met le plus mal à l'aise dans le monde professionnel ?",
+   opts:[{v:'conflict',e:'😰',t:'Les conflits et désaccords avec les autres'},{v:'routine',e:'😔',t:'La routine et le manque de nouveauté'},{v:'public',e:'😳',t:'Parler en public ou être sous les projecteurs'},{v:'failure',e:'😟',t:'Échouer ou décevoir ceux qui comptent sur moi'},{v:'isolation',e:'😶',t:'Travailler seul(e) sans contact humain'},{v:'instability',e:'😬',t:"L'incertitude et le manque de stabilité"},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q12 */
+  {id:'q11', type:'single', lbl:'Question 12 / 13', txt:'Dans 10 ans, quelle vie professionnelle imaginez-vous ?',
+   opts:[{v:'founder',e:'🚀',t:'Fondateur de mon propre projet'},{v:'expert',e:'🏆',t:'Expert reconnu dans mon domaine'},{v:'manager',e:'🎯',t:"Manager d'une équipe performante"},{v:'intl',e:'✈️',t:"En mission à l'international"},{v:'creator',e:'🎬',t:'Créateur indépendant'},{v:'researcher',e:'🔬',t:'Chercheur ou académicien'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q13 */
+  {id:'q12', type:'text', lbl:'Question 13 / 13', txt:'Décrivez votre rêve professionnel ou une ambition qui vous tient profondément à cœur.',
+   ph:"Ex : créer mon application mobile, travailler à l'international, faire de la recherche médicale, aider des communautés..."}
+];
+
+/* ══════════════════════════
+   QUIZ
+══════════════════════════ */
+function startQuiz() {
+  ans = {}; cur = 0;
+  show('s-quiz');
+  renderQ();
+}
+
+function renderProg() {
+  var h = '';
+  for (var i = 0; i < QS.length; i++) {
+    var c = i < cur ? 'done' : i === cur ? 'act' : '';
+    h += '<div class="prog-seg ' + c + '"></div>';
+  }
+  h += '<span class="prog-lbl">' + (cur + 1) + ' / ' + QS.length + '</span>';
+  document.getElementById('prog-row').innerHTML = h;
+}
+
+function renderQ() {
+  var q = QS[cur];
+  var h = '<div class="qcard">';
+  h += '<div class="qchip"><div class="qchip-dot"></div>' + q.lbl + '</div>';
+  h += '<div class="qtxt">' + q.txt + '</div>';
+
+  if (q.type === 'country') {
+    h += '<div class="country-input-wrap">';
+    h += '<span class="country-flag">🌍</span>';
+    h += '<input class="country-input" type="text" id="country-inp" placeholder="' + q.ph + '" value="' + (ans[q.id] || '') + '" oninput="handleCountry(this.value)" autocomplete="country-name">';
+    h += '</div>';
+    h += '<p class="country-hint">Indiquez le pays où vous souhaitez faire vos études ou votre carrière. Les recommandations seront adaptées à ce pays.</p>';
+
+  } else if (q.type === 'single') {
+    h += '<div class="opts">';
+    for (var i = 0; i < q.opts.length; i++) {
+      var o = q.opts[i];
+      var sel = ans[q.id] === o.v ? ' sel' : '';
+      var full = o.v === 'autre' ? ' opt-full' : '';
+      h += '<div class="opt' + sel + full + '" data-v="' + o.v + '" data-qid="' + q.id + '" onclick="pickS(this)">';
+      h += '<div class="opt-ico">' + o.e + '</div><span>' + o.t + '</span></div>';
+    }
+    h += '</div>';
+    h += '<div class="sub-box' + (ans[q.id] === 'autre' ? ' on' : '') + '" id="sub-' + q.id + '">';
+    h += '<input type="text" class="sub-inp" id="si-' + q.id + '" placeholder="Précisez votre réponse ici…" value="' + (ans[q.id + '_a'] || '') + '" oninput="handleA(\'' + q.id + '\',this.value)">';
+    h += '</div>';
+
+  } else if (q.type === 'multi') {
+    h += '<div class="multi-note">Sélectionnez jusqu\'à ' + q.max + ' choix</div>';
+    h += '<div class="opts">';
+    var arr = ans[q.id] || [];
+    for (var i = 0; i < q.opts.length; i++) {
+      var o = q.opts[i];
+      var sel = arr.indexOf(o.v) >= 0 ? ' sel' : '';
+      var full = o.v === 'autre' ? ' opt-full' : '';
+      h += '<div class="opt' + sel + full + '" data-v="' + o.v + '" data-qid="' + q.id + '" onclick="pickM(this,' + q.max + ')">';
+      h += '<div class="opt-ico">' + o.e + '</div><span>' + o.t + '</span></div>';
+    }
+    h += '</div>';
+    h += '<div class="sub-box' + ((arr.indexOf('autre') >= 0) ? ' on' : '') + '" id="sub-' + q.id + '">';
+    h += '<input type="text" class="sub-inp" id="si-' + q.id + '" placeholder="Précisez votre réponse ici…" value="' + (ans[q.id + '_a'] || '') + '" oninput="handleA(\'' + q.id + '\',this.value)">';
+    h += '</div>';
+
+  } else { /* text */
+    h += '<textarea class="free-inp" rows="5" placeholder="' + q.ph + '" oninput="handleT(\'' + q.id + '\',this.value)">' + (ans[q.id] || '') + '</textarea>';
+  }
+
+  h += '</div>';
+  document.getElementById('q-area').innerHTML = h;
+  if (q.type === 'country') {
+    var ci = document.getElementById('country-inp');
+    if (ci) ci.focus();
+  }
+  updateNav();
+  renderProg();
+}
+
+function handleCountry(v) { ans['q_country'] = v.trim(); updateNav(); }
+function pickS(el) {
+  var qid = el.getAttribute('data-qid');
+  var val = el.getAttribute('data-v');
+  ans[qid] = val;
+  el.closest('.opts').querySelectorAll('.opt').forEach(function(e) { e.classList.remove('sel'); });
+  el.classList.add('sel');
+  var sb = document.getElementById('sub-' + qid);
+  if (sb) {
+    if (val === 'autre') { sb.classList.add('on'); var si = document.getElementById('si-' + qid); if (si) si.focus(); }
+    else { sb.classList.remove('on'); delete ans[qid + '_a']; }
+  }
+  updateNav();
+}
+function pickM(el, max) {
+  var qid = el.getAttribute('data-qid');
+  var val = el.getAttribute('data-v');
+  var arr = (ans[qid] || []).slice();
+  var idx = arr.indexOf(val);
+  if (idx >= 0) { arr.splice(idx, 1); el.classList.remove('sel'); }
+  else if (arr.length < max) { arr.push(val); el.classList.add('sel'); }
+  ans[qid] = arr;
+  var sb = document.getElementById('sub-' + qid);
+  if (sb) {
+    if (arr.indexOf('autre') >= 0) { sb.classList.add('on'); }
+    else { sb.classList.remove('on'); delete ans[qid + '_a']; }
+  }
+  updateNav();
+}
+function handleA(qid, v) { ans[qid + '_a'] = v.trim(); updateNav(); }
+function handleT(qid, v) { ans[qid] = v.trim(); updateNav(); }
+
+function updateNav() {
+  var q = QS[cur];
+  var ok = false;
+  if (q.type === 'country') {
+    ok = (ans['q_country'] || '').length > 1;
+  } else if (q.type === 'single') {
+    var v = ans[q.id];
+    ok = !!v && (v !== 'autre' || (ans[q.id + '_a'] || '').length > 1);
+  } else if (q.type === 'multi') {
+    var arr = ans[q.id] || [];
+    ok = arr.length > 0 && (arr.indexOf('autre') < 0 || (ans[q.id + '_a'] || '').length > 1);
+  } else {
+    ok = (ans[q.id] || '').length > 2;
+  }
+  document.getElementById('btn-next').disabled = !ok;
+  document.getElementById('btn-back').style.visibility = cur > 0 ? 'visible' : 'hidden';
+  document.getElementById('btn-next').textContent = cur === QS.length - 1 ? 'Voir mon tableau de bord ✦' : 'Suivant →';
+}
+function goNext() { if (cur < QS.length - 1) { cur++; renderQ(); } else { startLoad(); } }
+function goBack() { if (cur > 0) { cur--; renderQ(); } }
+
+/* ══════════════════════════
+   LOADING + API PRINCIPALE
+══════════════════════════ */
+function startLoad() {
+  show('s-load');
+  ['ls1','ls2','ls3','ls4'].forEach(function(id, i) {
+    setTimeout(function() { document.getElementById(id).classList.add('show'); }, 700 + i * 900);
+  });
+  callAPI();
+}
+
+function buildSummary() {
+  var labs = {
+    q_country:'Pays etudes', q1:'Activite', q2:'Domaines', q3:'Emotion dominante',
+    q4:'Mode travail', q5:'Impact', q6:'Environnement', q7:'Etudes',
+    q8:'Moments accomplissement', q9:'Competences', q10:'Peurs pro',
+    q11:'Vision 10ans', q12:'Reve professionnel'
+  };
+  var lines = [];
+  var keys = Object.keys(labs);
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i];
+    var v = ans[k];
+    if (!v || (Array.isArray(v) && !v.length)) continue;
+    var s = Array.isArray(v) ? v.join(', ') : v;
+    if (ans[k + '_a']) s += ' (detail: ' + ans[k + '_a'] + ')';
+    lines.push(labs[k] + ': ' + s);
+  }
+  return lines.join('\n');
+}
+
+function extractJSON(raw) {
+  var s = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
+  var st = s.indexOf('{'); var en = s.lastIndexOf('}');
+  if (st < 0 || en < 0) throw new Error('Aucun JSON dans la réponse.');
+  s = s.slice(st, en + 1);
+  var depth = 0, inStr = false, esc = false;
+  for (var i = 0; i < s.length; i++) {
+    var c = s[i];
+    if (esc) { esc = false; continue; }
+    if (c === '\\' && inStr) { esc = true; continue; }
+    if (c === '"') { inStr = !inStr; continue; }
+    if (inStr) continue;
+    if (c === '{' || c === '[') depth++;
+    if (c === '}' || c === ']') depth--;
+  }
+  while (depth > 0) { s += '}'; depth--; }
+  return JSON.parse(s);
+}
+
+function callAPI() {
+  var country = ans['q_country'] || 'non précisé';
+  var summary = buildSummary();
+
+  fetch('/api/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 2000,
+      system: 'Tu es JobMatchAI. Reponds UNIQUEMENT avec un JSON valide et complet. Zero texte avant ou apres. Zero backticks.\n\nL utilisateur souhaite etudier ou travailler dans ce pays: ' + country + '\nTu dois imperativement adapter le Top 3 des metiers recommandes selon les filieres et formations disponibles dans ce pays specifique. Si un metier n est pas accessible dans ce pays, propose un autre metier disponible.\n\nFormat exact:\n{"profil_type_1":"ex Creatif","profil_emoji_1":"emoji","profil_type_2":"ex Empathique","profil_emoji_2":"emoji","profil":"2 phrases max qui decrivent les 2 personnalites combinees et leur lien avec les reponses emotionnelles","pays":"' + country + '","jobs":[{"rang":1,"titre":"Metier","domaine":"Secteur","filiere":"Filiere ou formation disponible dans ' + country + '","description":"1 phrase","pourquoi":"2 phrases liees aux reponses ET aux emotions exprimees","competences":["c1","c2","c3"],"score":92},{"rang":2,"titre":"Metier","domaine":"Secteur","filiere":"Filiere disponible dans ' + country + '","description":"1 phrase","pourquoi":"2 phrases","competences":["c1","c2","c3"],"score":81},{"rang":3,"titre":"Metier","domaine":"Secteur","filiere":"Filiere disponible dans ' + country + '","description":"1 phrase","pourquoi":"2 phrases","competences":["c1","c2","c3"],"score":74}],"dimensions":[{"nom":"Creativite","score":75},{"nom":"Analyse","score":60},{"nom":"Leadership","score":80},{"nom":"Emotionnel","score":70},{"nom":"Technique","score":55},{"nom":"Communication","score":85}],"conseils":"3 phrases pratiques adaptees au contexte de ' + country + '"}\n\nPROFILS: CREATIF, ANALYTIQUE, HUMANISTE, LEADER, TECHNICIEN, COMMUNICANT, SCIENTIFIQUE, GLOBAL, EMPATHIQUE, AMBITIEUX, CURIEUX, RESILIENT.\nScores jobs: 70 a 97 decroissants. Scores dimensions: 30 a 95. Textes courts. Francais.',
+      messages: [{ role: 'user', content: 'Reponses:\n' + summary + '\n\nJSON:' }]
+    })
+  })
+  .then(function(resp) {
+    if (!resp.ok) {
+      return resp.text().then(function(t) {
+        var msg = t.slice(0, 300);
+        try { var j = JSON.parse(t); msg = j.error && j.error.message ? j.error.message : msg; } catch(e){}
+        throw new Error('Erreur API ' + resp.status + ' : ' + msg);
+      });
+    }
+    return resp.json();
+  })
+  .then(function(data) {
+    var raw = (data.content || []).map(function(b) { return b.text || ''; }).join('').trim();
+    dashResult = extractJSON(raw);
+    setTimeout(function() { buildDashboard(dashResult); }, 3800);
+  })
+  .catch(function(err) {
+    setTimeout(function() {
+      show('s-dash');
+      document.getElementById('dash-content').innerHTML =
+        '<div class="err-wrap"><div class="err-box"><strong>Erreur lors de l\'analyse</strong>Vérifiez votre clé API et votre connexion.<div class="err-detail">' + err.message + '</div></div>' +
+        '<div style="text-align:center;margin-top:1.5rem"><button class="btn-out" onclick="startQuiz()">↺ Réessayer</button></div></div>';
+    }, 3800);
+  });
+}
+
+/* ══════════════════════════
+   DASHBOARD
+══════════════════════════ */
+function buildDashboard(r) {
+  var date = new Date().toLocaleDateString('fr-FR', {day:'2-digit', month:'long', year:'numeric'});
+  var medals = ['🥇','🥈','🥉'];
+  var jobs = r.jobs || [];
+  var dims = r.dimensions || [];
+  var country = ans['q_country'] || 'votre pays';
+  var h = '';
+
+  /* EN-TÊTE */
+  h += '<div class="dash-hd">';
+  h += '<div><div class="dash-eyebrow">✦ Tableau de bord · ' + date + '</div>';
+  h += '<div class="dash-title">Votre rapport d\'orientation</div>';
+  h += '<div class="dash-sub">Généré par JobMatch AI · Adapté pour <strong>' + country + '</strong></div></div>';
+  h += '<div class="dash-acts">';
+  h += '<button class="btn-out" onclick="show(\'s-fb\')">💬 Donner mon avis</button>';
+  h += '<button class="btn-out" onclick="goHome()">← Accueil</button>';
+  h += '</div></div>';
+
+  /* KPIs */
+  h += '<div class="kpi-row">';
+  h += '<div class="kpi kpi-country"><div class="kpi-lbl">Pays sélectionné</div><div class="kpi-val">🌍</div><div class="kpi-sub">' + country + '</div></div>';
+  h += '<div class="kpi"><div class="kpi-lbl">Personnalité #1</div><div class="kpi-val" style="font-size:1.3rem">' + (r.profil_type_1 || 'Hybride') + '</div><div class="kpi-sub">' + (r.profil_emoji_1 || '🌟') + '</div></div>';
+  h += '<div class="kpi"><div class="kpi-lbl">Personnalité #2</div><div class="kpi-val" style="font-size:1.3rem">' + (r.profil_type_2 || 'Hybride') + '</div><div class="kpi-sub">' + (r.profil_emoji_2 || '✨') + '</div></div>';
+  h += '<div class="kpi"><div class="kpi-lbl">Compatibilité #1</div><div class="kpi-val">' + (jobs[0] ? jobs[0].score : '-') + '%</div><div class="kpi-sub">' + (jobs[0] ? jobs[0].titre : '') + '</div></div>';
+  h += '</div>';
+
+  /* LIGNE 1 : 2 personnalités + barres */
+  h += '<div class="g2">';
+  h += '<div class="dc"><div class="dc-lbl"><div class="dc-dot"></div>Vos deux personnalités</div>';
+  h += '<div class="prof-row"><div class="prof-ico">' + (r.profil_emoji_1 || '🌟') + '</div><div><div class="prof-name">' + (r.profil_type_1 || 'Profil 1') + '</div><div class="prof-sub">Personnalité dominante</div></div></div>';
+  h += '<div class="sep-line"><span class="sep-label">combinée avec</span></div>';
+  h += '<div class="prof-row"><div class="prof-ico">' + (r.profil_emoji_2 || '✨') + '</div><div><div class="prof-name">' + (r.profil_type_2 || 'Profil 2') + '</div><div class="prof-sub">Personnalité complémentaire</div></div></div>';
+  h += '<p class="prof-txt" style="margin-top:.8rem">' + (r.profil || '') + '</p></div>';
+
+  h += '<div class="dc"><div class="dc-lbl"><div class="dc-dot"></div>Scores de compatibilité</div><div class="compat-list">';
+  for (var i = 0; i < jobs.length; i++) {
+    var cls = i === 1 ? ' m' : i === 2 ? ' l' : '';
+    h += '<div><div class="compat-lbl"><span class="compat-name">' + medals[i] + ' ' + jobs[i].titre + '</span><span class="compat-pct">' + jobs[i].score + '%</span></div>';
+    h += '<div class="bar-bg"><div class="bar-fill' + cls + '" data-w="' + jobs[i].score + '" style="width:0"></div></div></div>';
+  }
+  h += '</div></div></div>';
+
+  /* LIGNE 2 : radar + dimensions */
+  h += '<div class="g2">';
+  h += '<div class="dc"><div class="dc-lbl"><div class="dc-dot"></div>Carte des compétences</div><canvas id="radar" width="260" height="220"></canvas></div>';
+  h += '<div class="dc"><div class="dc-lbl"><div class="dc-dot"></div>Dimensions clés</div><div class="compat-list">';
+  for (var i = 0; i < dims.length; i++) {
+    var d = dims[i];
+    var cls = d.score < 50 ? ' l' : d.score < 70 ? ' m' : '';
+    h += '<div><div class="compat-lbl"><span class="compat-name">' + d.nom + '</span><span class="compat-pct">' + d.score + '%</span></div>';
+    h += '<div class="bar-bg"><div class="bar-fill' + cls + '" data-w="' + d.score + '" style="width:0"></div></div></div>';
+  }
+  h += '</div></div></div>';
+
+  /* TOP 3 MÉTIERS */
+  h += '<div class="dc-lbl" style="margin-bottom:12px"><div class="dc-dot"></div>Top 3 des métiers recommandés · Adapté à ' + country + '</div>';
+  h += '<div class="g3">';
+  for (var i = 0; i < jobs.length; i++) {
+    var j = jobs[i];
+    h += '<div class="jcard j' + (i + 1) + '">';
+    h += '<div class="jtop"><div class="jmedal">' + medals[i] + '</div>';
+    h += '<div><div class="jtitle">' + j.titre + '</div><span class="jtag">' + (j.domaine || '') + '</span></div></div>';
+    h += '<p class="jdesc">' + (j.description || '') + '</p>';
+    h += '<div class="jwhy"><div class="jwhy-l">Pourquoi ce métier</div><div class="jwhy-t">' + (j.pourquoi || '') + '</div></div>';
+    h += '<div class="skills">';
+    var comps = j.competences || [];
+    for (var k = 0; k < comps.length; k++) h += '<span class="skill">' + comps[k] + '</span>';
+    h += '</div>';
+    if (j.filiere) h += '<div class="filiere-badge">🎓 ' + j.filiere + '</div>';
+    h += '</div>';
+  }
+  h += '</div>';
+
+  /* CONSEILS */
+  h += '<div class="advice-box"><div class="advice-ico">🗺️</div>';
+  h += '<div><div class="advice-lbl">Prochaines étapes et conseils</div>';
+  h += '<p class="advice-txt">' + (r.conseils || '') + '</p></div></div>';
+
+  /* BOUTON UNIVERSITÉS */
+  h += '<div class="btn-uni-wrap">';
+  h += '<button class="btn-uni" onclick="searchUniversities()">';
+  h += '<svg viewBox="0 0 24 24" width="18" height="18" fill="var(--m700)"><path d="M12 3L1 9l4 2.18V15c0 3.31 3.13 6 7 6s7-2.69 7-6v-3.82L22 9 12 3zm6 8.5l-6 3.28L6 11.5v-2l6 3.28 6-3.28v2zM18 15c0 2.21-2.69 4-6 4s-6-1.79-6-4v-2.32l6 3.28 6-3.28V15z"/></svg>';
+  h += '🎓 Voir les universités disponibles en ' + country;
+  h += '</button></div>';
+
+  /* SECTION UNIVERSITÉS (masquée initialement) */
+  h += '<div class="uni-section" id="uni-section"></div>';
+
+  /* FEEDBACK CTA */
+  h += '<div class="fb-cta-block"><div style="font-size:2rem">💬</div>';
+  h += '<h3>Ce rapport vous a-t-il aidé ?</h3>';
+  h += '<p>Partagez votre expérience — votre avis améliore JobMatch AI pour tous.</p>';
+  h += '<button class="fb-cta-btn" onclick="show(\'s-fb\')">✦ Donner mon avis</button></div>';
+
+  document.getElementById('dash-content').innerHTML = h;
+  show('s-dash');
+
+  setTimeout(function() {
+    document.querySelectorAll('.bar-fill').forEach(function(el) {
+      el.style.width = el.getAttribute('data-w') + '%';
+    });
+    drawRadar(dims);
+  }, 260);
+}
+
+/* ══════════════════════════
+   RECHERCHE UNIVERSITÉS
+══════════════════════════ */
+function searchUniversities() {
+  var country = ans['q_country'] || 'France';
+  var jobs = dashResult ? (dashResult.jobs || []) : [];
+  var jobTitles = jobs.map(function(j) { return j.titre + ' (' + (j.filiere || j.domaine) + ')'; }).join(', ');
+  var uniSection = document.getElementById('uni-section');
+  if (!uniSection) return;
+
+  /* Afficher et scroller vers la section */
+  uniSection.style.display = 'block';
+  uniSection.innerHTML =
+    '<div class="uni-loading">' +
+    '<div class="load-ring" style="width:56px;height:56px;margin:0 auto 1rem"><div class="load-spin" style="width:22px;height:22px"></div></div>' +
+    '<p>Recherche des universités disponibles en <strong>' + country + '</strong>…</p></div>';
+  setTimeout(function() { uniSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+
+  fetch('/api/chat', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 2000,
+      tools: [{ 'type': 'web_search_20250305', 'name': 'web_search' }],
+      system: 'Tu es un expert en orientation universitaire internationale. Recherche sur le web les meilleures universites et etablissements denseignement superieur disponibles dans le pays indique pour chacun des metiers donnes. Reponds UNIQUEMENT en JSON valide sans backticks ni texte avant ou apres. Format exact: {"pays":"nom du pays","universites":[{"metier":"titre exact du metier","filiere":"filiere recommandee","etablissements":[{"nom":"Nom de l etablissement","programme":"Programme ou diplome exact","ville":"Ville","site":"URL du site si connu sinon vide"}]}]}',
+      messages: [{ role: 'user', content: 'Pays: ' + country + '\nMetiers a trouver: ' + jobTitles + '\nTrouve 3 etablissements reels par metier dans ce pays. JSON seulement.' }]
+    })
+  })
+  .then(function(resp) {
+    if (!resp.ok) {
+      return resp.text().then(function(t) {
+        var msg = t.slice(0, 300);
+        try { var j = JSON.parse(t); msg = j.error && j.error.message ? j.error.message : msg; } catch(e){}
+        throw new Error('API ' + resp.status + ': ' + msg);
+      });
+    }
+    return resp.json();
+  })
+  .then(function(data) {
+    var raw = (data.content || []).map(function(b) { return b.type === 'text' ? b.text : ''; }).join('').trim();
+    if (!raw) throw new Error('Réponse vide de l\'API.');
+    var result = extractJSON(raw);
+    displayUniversities(result, country);
+  })
+  .catch(function(err) {
+    uniSection.innerHTML = '<div class="uni-err">Une erreur est survenue lors de la recherche des universités.<br><small>' + err.message + '</small></div>';
+  });
+}
+
+function displayUniversities(data, country) {
+  var uniSection = document.getElementById('uni-section');
+  if (!uniSection) return;
+  var unis = data.universites || [];
+  var medals = ['uc1', 'uc2', 'uc3'];
+
+  var h = '<div class="uni-header">';
+  h += '<div class="uni-country-badge">🌍 ' + country + '</div>';
+  h += '<h3>Universités disponibles dans votre pays</h3>';
+  h += '<p>Résultats basés sur une recherche en temps réel pour votre pays.</p>';
+  h += '</div>';
+  h += '<div class="uni-grid">';
+
+  if (!unis.length) {
+    h += '<div class="uni-err" style="grid-column:1/-1">Aucun résultat trouvé. Essayez de reformuler le nom de votre pays.</div>';
+  } else {
+    for (var i = 0; i < unis.length; i++) {
+      var u = unis[i];
+      var etabs = u.etablissements || [];
+      h += '<div class="uni-card ' + (medals[i] || 'uc1') + '">';
+      h += '<div class="uni-card-title">' + (u.metier || '') + '<br><span style="font-size:12px;color:var(--ts);font-family:DM Sans,sans-serif;font-weight:400">' + (u.filiere || '') + '</span></div>';
+      if (!etabs.length) {
+        h += '<p style="font-size:13px;color:var(--ts)">Aucun établissement trouvé pour ce pays.</p>';
+      } else {
+        for (var j = 0; j < etabs.length; j++) {
+          var e = etabs[j];
+          h += '<div class="uni-item">';
+          h += '<div class="uni-name">' + (e.nom || '') + '</div>';
+          h += '<div class="uni-prog">' + (e.programme || '') + '</div>';
+          if (e.ville) h += '<div class="uni-city">📍 ' + e.ville + '</div>';
+          if (e.site && e.site.length > 3) h += '<a class="uni-link" href="' + (e.site.startsWith('http') ? e.site : 'https://' + e.site) + '" target="_blank">Visiter le site →</a>';
+          h += '</div>';
+        }
+      }
+      h += '</div>';
+    }
+  }
+
+  h += '</div>';
+  h += '<p class="uni-note">⚠️ Ces informations sont générées par IA avec recherche web. Vérifiez toujours les détails directement sur les sites officiels des établissements.</p>';
+  uniSection.innerHTML = h;
+  setTimeout(function() { uniSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+}
+
+/* ══════════════════════════
+   RADAR CHART
+══════════════════════════ */
+function drawRadar(dims) {
+  var canvas = document.getElementById('radar');
+  if (!canvas || !dims.length) return;
+  var ctx = canvas.getContext('2d');
+  var cx = 130, cy = 112, R = 82, n = dims.length;
+  ctx.clearRect(0, 0, 260, 220);
+  function pts(sc) {
+    var res = [];
+    for (var i = 0; i < n; i++) {
+      var a = (i / n) * Math.PI * 2 - Math.PI / 2;
+      res.push([cx + Math.cos(a) * R * sc, cy + Math.sin(a) * R * sc]);
+    }
+    return res;
+  }
+  [0.25, 0.5, 0.75, 1].forEach(function(s) {
+    var p = pts(s);
+    ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]);
+    for (var i = 1; i < n; i++) ctx.lineTo(p[i][0], p[i][1]);
+    ctx.closePath(); ctx.strokeStyle = '#DDD0B8'; ctx.lineWidth = 1; ctx.stroke();
+  });
+  pts(1).forEach(function(p) {
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(p[0], p[1]);
+    ctx.strokeStyle = '#DDD0B8'; ctx.lineWidth = 1; ctx.stroke();
+  });
+  var dp = dims.map(function(d, i) {
+    var a = (i / n) * Math.PI * 2 - Math.PI / 2;
+    return [cx + Math.cos(a) * R * (d.score / 100), cy + Math.sin(a) * R * (d.score / 100)];
+  });
+  ctx.beginPath(); ctx.moveTo(dp[0][0], dp[0][1]);
+  for (var i = 1; i < n; i++) ctx.lineTo(dp[i][0], dp[i][1]);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(63,175,122,0.18)'; ctx.fill();
+  ctx.strokeStyle = '#3FAF7A'; ctx.lineWidth = 2; ctx.stroke();
+  dp.forEach(function(p) {
+    ctx.beginPath(); ctx.arc(p[0], p[1], 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#3FAF7A'; ctx.fill();
+  });
+  var lp = pts(1.22);
+  ctx.font = '11px DM Sans,sans-serif'; ctx.fillStyle = '#5C5248'; ctx.textAlign = 'center';
+  for (var i = 0; i < n; i++) {
+    ctx.fillText(dims[i].nom, lp[i][0], lp[i][1] > cy ? lp[i][1] + 13 : lp[i][1] - 4);
+  }
+}
+
+/* ══════════════════════════
+   FEEDBACK
+══════════════════════════ */
+function toggleFbo(el) { el.classList.toggle('sel'); }
+function submitFb() {
+  document.getElementById('fb-form').style.display = 'none';
+  document.getElementById('fb-thanks').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+/* ══════════════════════════
+   INIT
+══════════════════════════ */
+document.addEventListener('DOMContentLoaded', function() {
+  initApiKey();
+  document.getElementById('nav-logo').addEventListener('click', function() {
+    var active = document.querySelector('.screen.on');
+    if (active && active.id === 's-key') return;
+    goHome();
+  });
+  document.getElementById('nav-back').addEventListener('click', function() {
+    var active = document.querySelector('.screen.on');
+    if (!active || active.id === 's-load') return;
+    goHome();
+  });
+  document.getElementById('start-btn').addEventListener('click', function() { startQuiz(); });
+  document.getElementById('start-btn-2').addEventListener('click', function() { startQuiz(); });
+});
+</script>
+</body>
+</html>
