@@ -1,6 +1,9 @@
 {
   "name": "jobmatch-ai",
   "version": "1.0.0",
-  "description": "JobMatch AI",
-  "private": true
+  "description": "JobMatch AI - Agent d'orientation professionnelle",
+  "private": true,
+  "engines": {
+    "node": "24.x"
+  }
 }
