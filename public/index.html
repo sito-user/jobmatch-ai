@@ -466,122 +466,62 @@ function initApiKey() {
 }
 
 /* ══════════════════════════
-   RIASEC (modèle de Holland)
-══════════════════════════ */
-var DIM_INFO = {
-  R:{nom:'Réaliste',     e:'🔧'},
-  I:{nom:'Investigateur',e:'🔬'},
-  A:{nom:'Artistique',   e:'🎨'},
-  S:{nom:'Social',       e:'🤝'},
-  E:{nom:'Entreprenant', e:'📈'},
-  C:{nom:'Conventionnel',e:'📋'}
-};
-/* Échelle commune aux 12 items RIASEC — valeurs = points (3 → 0) */
-var SCALE_OPTS = [
-  {v:'3',e:'🟢',t:'Tout à fait'},
-  {v:'2',e:'🙂',t:'Plutôt'},
-  {v:'1',e:'😐',t:'Un peu'},
-  {v:'0',e:'⚪',t:'Pas du tout'}
-];
-
-/* ══════════════════════════
-   QUESTIONS (22 au total, 4 sections)
-   Le libellé "Question X / N" est généré automatiquement.
+   QUESTIONS (13 au total)
 ══════════════════════════ */
 var QS = [
-  /* ── SECTION 1 · CONTEXTE ── */
-  {id:'q_country', type:'country', sec:'Contexte', sum:'Pays visé',
+  /* Q1 — PAYS (spéciale, type country) */
+  {id:'q_country', type:'country', lbl:'Question 1 / 13',
    txt:'Dans quel pays souhaitez-vous étudier ou travailler ?',
    ph:"Ex : France, Côte d'Ivoire, Canada, Maroc, Sénégal, Belgique…"},
 
-  {id:'studies', type:'single', sec:'Contexte', sum:"Niveau d'études visé",
-   txt:"Quel niveau d'études envisagez-vous ?",
-   opts:[{v:'bac2',e:'📚',t:'Bac +2 (BTS, BUT)'},{v:'bac3',e:'📗',t:'Licence / Bac +3'},{v:'bac5',e:'📘',t:'Master / Bac +5'},{v:'bac8',e:'🔭',t:'Doctorat'},{v:'certif',e:'🌐',t:'Certifications en ligne'},{v:'unsure',e:'🤔',t:'Je ne sais pas encore'}]},
+  /* Q2 */
+  {id:'q1', type:'single', lbl:'Question 2 / 13', txt:'Quelles activités vous énergisent le plus au quotidien ?',
+   opts:[{v:'create',e:'🎨',t:'Créer et imaginer des choses'},{v:'analyze',e:'📊',t:'Analyser et résoudre des problèmes'},{v:'help',e:'🤝',t:'Aider et accompagner les autres'},{v:'build',e:'🔧',t:'Construire et fabriquer concrètement'},{v:'lead',e:'🎯',t:'Diriger et prendre des décisions'},{v:'communicate',e:'🎤',t:'Communiquer et convaincre'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
 
-  /* ── SECTION 2 · TA PERSONNALITÉ (RIASEC, échelle) ── */
-  {id:'r1', type:'scale', dim:'R', sec:'Ta personnalité',
-   txt:'Construire, réparer ou manipuler des objets et des machines de mes mains.'},
-  {id:'r2', type:'scale', dim:'R', sec:'Ta personnalité',
-   txt:'Travailler dehors, sur le terrain, ou avec des outils techniques.'},
-  {id:'i1', type:'scale', dim:'I', sec:'Ta personnalité',
-   txt:'Analyser un problème complexe et chercher à le comprendre en profondeur.'},
-  {id:'i2', type:'scale', dim:'I', sec:'Ta personnalité',
-   txt:'Explorer des données, mener des expériences, tester des hypothèses.'},
-  {id:'a1', type:'scale', dim:'A', sec:'Ta personnalité',
-   txt:'Créer et exprimer mes idées : dessin, écriture, musique, design…'},
-  {id:'a2', type:'scale', dim:'A', sec:'Ta personnalité',
-   txt:'Inventer des choses originales, sans consignes strictes.'},
-  {id:'s1', type:'scale', dim:'S', sec:'Ta personnalité',
-   txt:'Aider, écouter et accompagner les autres.'},
-  {id:'s2', type:'scale', dim:'S', sec:'Ta personnalité',
-   txt:'Enseigner, conseiller ou prendre soin des gens.'},
-  {id:'e1', type:'scale', dim:'E', sec:'Ta personnalité',
-   txt:'Convaincre, négocier et entraîner un groupe vers un objectif.'},
-  {id:'e2', type:'scale', dim:'E', sec:'Ta personnalité',
-   txt:'Lancer un projet, prendre des décisions et diriger.'},
-  {id:'c1', type:'scale', dim:'C', sec:'Ta personnalité',
-   txt:'Organiser, classer et suivre des procédures avec rigueur.'},
-  {id:'c2', type:'scale', dim:'C', sec:'Ta personnalité',
-   txt:'Gérer des chiffres, des plannings ou des dossiers avec précision.'},
+  /* Q3 */
+  {id:'q2', type:'multi', max:3, lbl:'Question 3 / 13', txt:'Quels domaines vous passionnent le plus ? (3 choix max)',
+   opts:[{v:'tech',e:'💻',t:'Technologie et numérique'},{v:'science',e:'🔬',t:'Sciences et recherche'},{v:'health',e:'🏥',t:'Santé et médecine'},{v:'art',e:'🎭',t:'Arts et création'},{v:'business',e:'📈',t:'Business et finance'},{v:'social',e:'🌱',t:'Humanitaire et social'},{v:'media',e:'📡',t:'Médias et communication'},{v:'engineering',e:'⚙️',t:'Ingénierie et fabrication'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
 
-  /* ── SECTION 3 · VALEURS & STYLE ── */
-  {id:'emotion', type:'single', sec:'Valeurs & style', sum:'Émotion dominante',
-   txt:'Quelle émotion vous définit le mieux au travail ou en cours ?',
+  /* Q4 — ÉMOTION DOMINANTE */
+  {id:'q3', type:'single', lbl:'Question 4 / 13', txt:'Quelle émotion vous définit le mieux au travail ou en cours ?',
    opts:[{v:'passion',e:'🔥',t:'La passion — je me surpasse quand je suis passionné(e)'},{v:'calm',e:'🌊',t:'Le calme — je réfléchis mieux dans la sérénité'},{v:'empathy_feel',e:'🤗',t:"L'empathie — je ressens profondément les émotions des autres"},{v:'ambition',e:'⚡',t:'L\'ambition — la compétition me motive fortement'},{v:'curiosity',e:'🔍',t:"La curiosité — l'inconnu m'excite et m'attire"},{v:'anxiety',e:'💭',t:'L\'anxiété créatrice — le stress me pousse à me dépasser'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
 
-  {id:'values', type:'multi', max:2, sec:'Valeurs & style', sum:'Valeurs prioritaires',
-   txt:'Qu\'est-ce qui compte le plus pour vous dans une carrière ? (2 choix max)',
-   opts:[{v:'salary',e:'💰',t:'Un bon salaire'},{v:'meaning',e:'🌍',t:'Le sens et l\'impact'},{v:'freedom',e:'🕊️',t:'La liberté et l\'autonomie'},{v:'stability',e:'🛡️',t:'La stabilité et la sécurité'},{v:'recognition',e:'🏆',t:'La reconnaissance'},{v:'balance',e:'⚖️',t:'L\'équilibre vie pro / perso'},{v:'learning',e:'📚',t:'Apprendre en continu'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
-
-  {id:'rhythm', type:'single', sec:'Valeurs & style', sum:'Rapport à la pression',
-   txt:'Comment réagissez-vous face à la pression et aux délais ?',
-   opts:[{v:'thrive',e:'🔥',t:'Je carbure sous pression, ça me stimule'},{v:'planned',e:'🎯',t:'Je gère bien si je m\'organise à l\'avance'},{v:'steady',e:'🌊',t:'Je préfère un rythme régulier et serein'},{v:'calm_need',e:'🧘',t:'J\'ai besoin de calme et de temps'},{v:'depends',e:'🔀',t:'Ça dépend vraiment du sujet'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
-
-  {id:'talent', type:'single', sec:'Valeurs & style', sum:'Talent naturel (regard des autres)',
-   txt:'Pour quoi votre entourage vous sollicite-t-il le plus souvent ?',
-   opts:[{v:'advice',e:'💡',t:'Un conseil ou un avis'},{v:'organize',e:'🗂️',t:'Organiser et planifier'},{v:'repair',e:'🔧',t:'Réparer ou bricoler'},{v:'listen',e:'🤗',t:'Écouter et réconforter'},{v:'teach',e:'📖',t:'Expliquer ou enseigner'},{v:'motivate',e:'🔥',t:'Motiver et entraîner le groupe'},{v:'create',e:'🎨',t:'Créer ou imaginer'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
-
-  {id:'workmode', type:'single', sec:'Valeurs & style', sum:'Mode de travail',
-   txt:'Comment préférez-vous travailler ?',
+  /* Q5 */
+  {id:'q4', type:'single', lbl:'Question 5 / 13', txt:'Comment préférez-vous travailler ?',
    opts:[{v:'team',e:'👥',t:'En équipe, collaboration permanente'},{v:'autonomous',e:'🧩',t:'En autonomie totale, à mon rythme'},{v:'mix',e:'⚖️',t:'Un mélange équilibré des deux'},{v:'field',e:'🌍',t:'Sur le terrain, en déplacement régulier'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
 
-  /* ── SECTION 4 · AMBITION ── */
-  {id:'fears', type:'single', sec:'Ambition', sum:'Zone d\'inconfort',
-   txt:"Quelle situation vous met le plus mal à l'aise dans le monde professionnel ?",
+  /* Q6 */
+  {id:'q5', type:'single', lbl:'Question 6 / 13', txt:'Quel impact souhaitez-vous avoir sur le monde ?',
+   opts:[{v:'innovate',e:'🔭',t:'Innover et faire avancer les technologies'},{v:'heal',e:'💚',t:'Soigner et améliorer la qualité de vie'},{v:'inspire',e:'🎆',t:'Inspirer et émouvoir par la création'},{v:'change',e:'🕊️',t:'Transformer la société, défendre des causes'},{v:'grow',e:'📈',t:'Créer de la valeur économique'},{v:'protect',e:'🛡️',t:'Protéger les systèmes et les données'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q7 */
+  {id:'q6', type:'single', lbl:'Question 7 / 13', txt:'Quel environnement de travail vous correspond ?',
+   opts:[{v:'startup',e:'⚡',t:'Startup dynamique et innovante'},{v:'corporate',e:'🏛️',t:'Grande entreprise internationale'},{v:'ngo',e:'🌿',t:'ONG, association ou institution publique'},{v:'lab',e:'🔬',t:'Laboratoire ou centre de recherche'},{v:'freelance',e:'🖥️',t:'Freelance et télétravail'},{v:'field',e:'🌐',t:"Terrain et missions à l'étranger"},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q8 */
+  {id:'q7', type:'single', lbl:'Question 8 / 13', txt:"Quel niveau d'études envisagez-vous ?",
+   opts:[{v:'bac2',e:'📚',t:'Bac +2 (BTS, BUT, DUT)'},{v:'bac3',e:'📗',t:'Licence / Bac +3'},{v:'bac5',e:'📘',t:'Master / Grande école / Bac +5'},{v:'bac8',e:'🔭',t:'Doctorat / Recherche approfondie'},{v:'certif',e:'🌐',t:'Formations en ligne et certifications'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q9 — ACCOMPLISSEMENT */
+  {id:'q8', type:'single', lbl:'Question 9 / 13', txt:'Dans quels moments vous sentez-vous vraiment vivant(e) et accompli(e) ?',
+   opts:[{v:'helping_feel',e:'🤝',t:"Quand j'aide quelqu'un et que je vois la différence"},{v:'creating_feel',e:'🎨',t:'Quand je crée quelque chose de nouveau et original'},{v:'solving_feel',e:'🧩',t:'Quand je résous un problème complexe'},{v:'recognized_feel',e:'🏆',t:'Quand mon travail est reconnu et valorisé'},{v:'connecting_feel',e:'🌍',t:"Quand je me connecte à des personnes ou cultures différentes"},{v:'growing_feel',e:'🌱',t:"Quand j'apprends quelque chose qui me transforme"},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q10 */
+  {id:'q9', type:'multi', max:3, lbl:'Question 10 / 13', txt:'Quelles compétences souhaitez-vous développer ? (3 max)',
+   opts:[{v:'coding',e:'💻',t:'Programmation et développement'},{v:'design',e:'🎨',t:'Design visuel et UX'},{v:'data',e:'📊',t:'Analyse de données'},{v:'people',e:'👥',t:'Management et leadership'},{v:'writing',e:'✍️',t:'Rédaction et communication'},{v:'science',e:'🔬',t:'Recherche et expérimentation'},{v:'sales',e:'🤝',t:'Commerce et négociation'},{v:'languages',e:'🌐',t:'Langues étrangères'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
+
+  /* Q11 — PEURS */
+  {id:'q10', type:'single', lbl:'Question 11 / 13', txt:"Quelle situation vous met le plus mal à l'aise dans le monde professionnel ?",
    opts:[{v:'conflict',e:'😰',t:'Les conflits et désaccords avec les autres'},{v:'routine',e:'😔',t:'La routine et le manque de nouveauté'},{v:'public',e:'😳',t:'Parler en public ou être sous les projecteurs'},{v:'failure',e:'😟',t:'Échouer ou décevoir ceux qui comptent sur moi'},{v:'isolation',e:'😶',t:'Travailler seul(e) sans contact humain'},{v:'instability',e:'😬',t:"L'incertitude et le manque de stabilité"},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
 
-  {id:'vision', type:'single', sec:'Ambition', sum:'Vision à 10 ans',
-   txt:'Dans 10 ans, quelle vie professionnelle imaginez-vous ?',
+  /* Q12 */
+  {id:'q11', type:'single', lbl:'Question 12 / 13', txt:'Dans 10 ans, quelle vie professionnelle imaginez-vous ?',
    opts:[{v:'founder',e:'🚀',t:'Fondateur de mon propre projet'},{v:'expert',e:'🏆',t:'Expert reconnu dans mon domaine'},{v:'manager',e:'🎯',t:"Manager d'une équipe performante"},{v:'intl',e:'✈️',t:"En mission à l'international"},{v:'creator',e:'🎬',t:'Créateur indépendant'},{v:'researcher',e:'🔬',t:'Chercheur ou académicien'},{v:'autre',e:'✏️',t:'Autre — précisez ci-dessous'}]},
 
-  {id:'dream', type:'text', sec:'Ambition', sum:'Rêve professionnel',
-   txt:'Décrivez votre rêve professionnel ou une ambition qui vous tient à cœur.',
+  /* Q13 */
+  {id:'q12', type:'text', lbl:'Question 13 / 13', txt:'Décrivez votre rêve professionnel ou une ambition qui vous tient profondément à cœur.',
    ph:"Ex : créer mon application mobile, travailler à l'international, faire de la recherche médicale, aider des communautés..."}
 ];
-
-/* Score RIASEC calculé côté client (déterministe, reproductible) */
-function computeRIASEC() {
-  var order = ['R','I','A','S','E','C'];
-  var raw = {R:0,I:0,A:0,S:0,E:0,C:0};
-  var count = {R:0,I:0,A:0,S:0,E:0,C:0};
-  for (var i = 0; i < QS.length; i++) {
-    var q = QS[i];
-    if (q.type === 'scale' && q.dim) {
-      count[q.dim]++;
-      var v = parseInt(ans[q.id], 10);
-      if (!isNaN(v)) raw[q.dim] += v;
-    }
-  }
-  var dims = order.map(function(L) {
-    var max = (count[L] || 1) * 3;
-    return {nom:DIM_INFO[L].nom, abbr:L, score:Math.round(raw[L] / max * 100)};
-  });
-  var sorted = order.slice().sort(function(a, b) { return raw[b] - raw[a]; });
-  var top = sorted.map(function(L) {
-    return {letter:L, nom:DIM_INFO[L].nom, e:DIM_INFO[L].e, score:raw[L]};
-  });
-  return {dims:dims, top:top, code:sorted.slice(0, 3).join(''), raw:raw};
-}
 
 /* ══════════════════════════
    QUIZ
@@ -605,8 +545,7 @@ function renderProg() {
 function renderQ() {
   var q = QS[cur];
   var h = '<div class="qcard">';
-  var lbl = (q.sec ? q.sec + ' · ' : '') + 'Question ' + (cur + 1) + ' / ' + QS.length;
-  h += '<div class="qchip"><div class="qchip-dot"></div>' + lbl + '</div>';
+  h += '<div class="qchip"><div class="qchip-dot"></div>' + q.lbl + '</div>';
   h += '<div class="qtxt">' + q.txt + '</div>';
 
   if (q.type === 'country') {
@@ -628,16 +567,6 @@ function renderQ() {
     h += '</div>';
     h += '<div class="sub-box' + (ans[q.id] === 'autre' ? ' on' : '') + '" id="sub-' + q.id + '">';
     h += '<input type="text" class="sub-inp" id="si-' + q.id + '" placeholder="Précisez votre réponse ici…" value="' + (ans[q.id + '_a'] || '') + '" oninput="handleA(\'' + q.id + '\',this.value)">';
-    h += '</div>';
-
-  } else if (q.type === 'scale') {
-    h += '<div class="opts">';
-    for (var i = 0; i < SCALE_OPTS.length; i++) {
-      var so = SCALE_OPTS[i];
-      var ssel = ans[q.id] === so.v ? ' sel' : '';
-      h += '<div class="opt opt-full' + ssel + '" data-v="' + so.v + '" data-qid="' + q.id + '" onclick="pickS(this)">';
-      h += '<div class="opt-ico">' + so.e + '</div><span>' + so.t + '</span></div>';
-    }
     h += '</div>';
 
   } else if (q.type === 'multi') {
@@ -707,7 +636,7 @@ function updateNav() {
   var ok = false;
   if (q.type === 'country') {
     ok = (ans['q_country'] || '').length > 1;
-  } else if (q.type === 'single' || q.type === 'scale') {
+  } else if (q.type === 'single') {
     var v = ans[q.id];
     ok = !!v && (v !== 'autre' || (ans[q.id + '_a'] || '').length > 1);
   } else if (q.type === 'multi') {
@@ -734,28 +663,22 @@ function startLoad() {
   callAPI();
 }
 
-function optLabel(q, val) {
-  if (q.opts) {
-    for (var i = 0; i < q.opts.length; i++) {
-      if (q.opts[i].v === val) return q.opts[i].t;
-    }
-  }
-  return val;
-}
-/* Résumé texte pour l'IA — piloté par QS : toute question (sauf échelle
-   RIASEC, déjà résumée par le score) est automatiquement incluse. */
 function buildSummary() {
+  var labs = {
+    q_country:'Pays etudes', q1:'Activite', q2:'Domaines', q3:'Emotion dominante',
+    q4:'Mode travail', q5:'Impact', q6:'Environnement', q7:'Etudes',
+    q8:'Moments accomplissement', q9:'Competences', q10:'Peurs pro',
+    q11:'Vision 10ans', q12:'Reve professionnel'
+  };
   var lines = [];
-  for (var i = 0; i < QS.length; i++) {
-    var q = QS[i];
-    if (q.type === 'scale' || !q.sum) continue;
-    var v = ans[q.id];
+  var keys = Object.keys(labs);
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i];
+    var v = ans[k];
     if (!v || (Array.isArray(v) && !v.length)) continue;
-    var s = Array.isArray(v)
-      ? v.map(function(x) { return optLabel(q, x); }).join(', ')
-      : optLabel(q, v);
-    if (ans[q.id + '_a']) s += ' (précision : ' + ans[q.id + '_a'] + ')';
-    lines.push(q.sum + ' : ' + s);
+    var s = Array.isArray(v) ? v.join(', ') : v;
+    if (ans[k + '_a']) s += ' (detail: ' + ans[k + '_a'] + ')';
+    lines.push(labs[k] + ': ' + s);
   }
   return lines.join('\n');
 }
@@ -782,9 +705,6 @@ function extractJSON(raw) {
 function callAPI() {
   var country = ans['q_country'] || 'non précisé';
   var summary = buildSummary();
-  var riasec = computeRIASEC();
-  var riasecText = riasec.top.map(function(t) { return t.letter + ' ' + t.nom + ' = ' + t.score + '/6'; }).join(', ');
-  var topNames = riasec.top.slice(0, 3).map(function(t) { return t.nom; }).join(', ');
 
   fetch('/api/chat', {
     method: 'POST',
@@ -794,12 +714,8 @@ function callAPI() {
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 2000,
-      system: 'Tu es JobMatchAI, conseiller d orientation. Reponds UNIQUEMENT avec un JSON valide et complet. Zero texte avant ou apres. Zero backticks.\n\n'
-        + 'Pays vise: ' + country + '. Adapte IMPERATIVEMENT le Top 3 des metiers aux filieres et formations reellement disponibles dans ce pays. Si un metier n est pas accessible, propose une alternative disponible sur place.\n\n'
-        + 'PROFIL RIASEC (modele de Holland), calcule a partir des reponses: ' + riasecText + '. Code Holland dominant: ' + riasec.code + ' (' + topNames + ').\n'
-        + 'Recommande 3 metiers dont le profil correspond a ce code Holland ET aux valeurs et emotions exprimees. IMPORTANT: couvre TOUS les secteurs (sante, social, arts, sciences, technique, artisanat, commerce, droit, education, agriculture...). Ne surpondere PAS les metiers du numerique ou de l informatique, sauf si le profil et le reve le justifient clairement.\n\n'
-        + 'Format exact:\n{"profil":"2 phrases max combinant le profil RIASEC ET les emotions/valeurs exprimees","pays":"' + country + '","jobs":[{"rang":1,"titre":"Metier","domaine":"Secteur","holland":"ex IAE","filiere":"Filiere disponible dans ' + country + '","description":"1 phrase","pourquoi":"2 phrases liees au profil RIASEC ET aux reponses","competences":["c1","c2","c3"],"score":92},{"rang":2,"titre":"Metier","domaine":"Secteur","holland":"code","filiere":"Filiere disponible dans ' + country + '","description":"1 phrase","pourquoi":"2 phrases","competences":["c1","c2","c3"],"score":81},{"rang":3,"titre":"Metier","domaine":"Secteur","holland":"code","filiere":"Filiere disponible dans ' + country + '","description":"1 phrase","pourquoi":"2 phrases","competences":["c1","c2","c3"],"score":74}],"conseils":"3 phrases pratiques adaptees au contexte de ' + country + '"}\n\nScores jobs: 70 a 97 decroissants. Textes courts, en francais, vouvoiement bienveillant.',
-      messages: [{ role: 'user', content: 'Reponses au quiz:\n' + summary + '\n\nGenere le JSON:' }]
+      system: 'Tu es JobMatchAI. Reponds UNIQUEMENT avec un JSON valide et complet. Zero texte avant ou apres. Zero backticks.\n\nL utilisateur souhaite etudier ou travailler dans ce pays: ' + country + '\nTu dois imperativement adapter le Top 3 des metiers recommandes selon les filieres et formations disponibles dans ce pays specifique. Si un metier n est pas accessible dans ce pays, propose un autre metier disponible.\n\nFormat exact:\n{"profil_type_1":"ex Creatif","profil_emoji_1":"emoji","profil_type_2":"ex Empathique","profil_emoji_2":"emoji","profil":"2 phrases max qui decrivent les 2 personnalites combinees et leur lien avec les reponses emotionnelles","pays":"' + country + '","jobs":[{"rang":1,"titre":"Metier","domaine":"Secteur","filiere":"Filiere ou formation disponible dans ' + country + '","description":"1 phrase","pourquoi":"2 phrases liees aux reponses ET aux emotions exprimees","competences":["c1","c2","c3"],"score":92},{"rang":2,"titre":"Metier","domaine":"Secteur","filiere":"Filiere disponible dans ' + country + '","description":"1 phrase","pourquoi":"2 phrases","competences":["c1","c2","c3"],"score":81},{"rang":3,"titre":"Metier","domaine":"Secteur","filiere":"Filiere disponible dans ' + country + '","description":"1 phrase","pourquoi":"2 phrases","competences":["c1","c2","c3"],"score":74}],"dimensions":[{"nom":"Creativite","score":75},{"nom":"Analyse","score":60},{"nom":"Leadership","score":80},{"nom":"Emotionnel","score":70},{"nom":"Technique","score":55},{"nom":"Communication","score":85}],"conseils":"3 phrases pratiques adaptees au contexte de ' + country + '"}\n\nPROFILS: CREATIF, ANALYTIQUE, HUMANISTE, LEADER, TECHNICIEN, COMMUNICANT, SCIENTIFIQUE, GLOBAL, EMPATHIQUE, AMBITIEUX, CURIEUX, RESILIENT.\nScores jobs: 70 a 97 decroissants. Scores dimensions: 30 a 95. Textes courts. Francais.',
+      messages: [{ role: 'user', content: 'Reponses:\n' + summary + '\n\nJSON:' }]
     })
   })
   .then(function(resp) {
@@ -815,13 +731,6 @@ function callAPI() {
   .then(function(data) {
     var raw = (data.content || []).map(function(b) { return b.text || ''; }).join('').trim();
     dashResult = extractJSON(raw);
-    /* Le profil RIASEC est calculé par le code (déterministe), pas par l'IA. */
-    dashResult.dimensions = riasec.dims;
-    dashResult.holland = riasec.code;
-    dashResult.profil_type_1 = riasec.top[0].nom;
-    dashResult.profil_emoji_1 = riasec.top[0].e;
-    dashResult.profil_type_2 = riasec.top[1].nom;
-    dashResult.profil_emoji_2 = riasec.top[1].e;
     setTimeout(function() { buildDashboard(dashResult); }, 3800);
   })
   .catch(function(err) {
@@ -849,7 +758,7 @@ function buildDashboard(r) {
   h += '<div class="dash-hd">';
   h += '<div><div class="dash-eyebrow">✦ Tableau de bord · ' + date + '</div>';
   h += '<div class="dash-title">Votre rapport d\'orientation</div>';
-  h += '<div class="dash-sub">Généré par JobMatch AI · Adapté pour <strong>' + country + '</strong>' + (r.holland ? ' · Profil Holland : <strong>' + r.holland + '</strong>' : '') + '</div></div>';
+  h += '<div class="dash-sub">Généré par JobMatch AI · Adapté pour <strong>' + country + '</strong></div></div>';
   h += '<div class="dash-acts">';
   h += '<button class="btn-out" onclick="show(\'s-fb\')">💬 Donner mon avis</button>';
   h += '<button class="btn-out" onclick="goHome()">← Accueil</button>';
@@ -1081,7 +990,7 @@ function drawRadar(dims) {
   var lp = pts(1.22);
   ctx.font = '11px DM Sans,sans-serif'; ctx.fillStyle = '#5C5248'; ctx.textAlign = 'center';
   for (var i = 0; i < n; i++) {
-    ctx.fillText(dims[i].abbr || dims[i].nom, lp[i][0], lp[i][1] > cy ? lp[i][1] + 13 : lp[i][1] - 4);
+    ctx.fillText(dims[i].nom, lp[i][0], lp[i][1] > cy ? lp[i][1] + 13 : lp[i][1] - 4);
   }
 }
 
