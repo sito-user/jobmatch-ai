@@ -106,8 +106,7 @@ jobmatch-ai/
 **Aya Aidibi** — projet personnel d'orientation par l'IA.
 
 <!-- Complète tes liens ci-dessous 👇 -->
-- GitHub : [@ton-username](https://github.com/ton-username)
-- LinkedIn : [Ton profil](https://linkedin.com/in/ton-profil)
+- GitHub : [@ton-username](https://github.com/sito-user)
 
 ---
 
